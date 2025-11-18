@@ -1,0 +1,2 @@
+class ShipmentDocumentsController < ApplicationController
+end

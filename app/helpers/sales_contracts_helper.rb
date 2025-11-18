@@ -1,0 +1,2 @@
+module SalesContractsHelper
+end

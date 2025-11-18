@@ -1,4 +1,21 @@
 Rails.application.routes.draw do
+  resources :suppliers
+  resources :stock_houses
+  resources :jute_purchases
+  resources :procurement_costs
+  resources :jute_stocks
+  resources :stock_movements
+  resources :processing_costs
+  resources :employees
+  resources :salaries
+  resources :accounts
+  resources :transactions
+  resources :buyers
+  resources :sales_contracts
+  resources :shipments
+  resources :export_costs
+  resources :shipment_documents
+
   devise_for :users
   get "posts/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

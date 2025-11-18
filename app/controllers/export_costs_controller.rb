@@ -1,0 +1,2 @@
+class ExportCostsController < ApplicationController
+end
