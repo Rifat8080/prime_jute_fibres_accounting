@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  payment_date: 2025-11-18
+  amount: 9.99
+  payment_period_start: 2025-11-18
+  payment_period_end: 2025-11-18
+  notes: MyText
+
+two:
+  payment_date: 2025-11-18
+  amount: 9.99
+  payment_period_start: 2025-11-18
+  payment_period_end: 2025-11-18
+  notes: MyText

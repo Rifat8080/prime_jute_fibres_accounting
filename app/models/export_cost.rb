@@ -1,0 +1,2 @@
+class ExportCost < ApplicationRecord
+end

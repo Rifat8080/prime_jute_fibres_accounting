@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  purchase_date: 2025-11-18
+  jute_variety: MyString
+  quantity_kg: 9.99
+  rate_per_kg: 9.99
+  total_amount: 9.99
+  notes: MyText
+
+two:
+  purchase_date: 2025-11-18
+  jute_variety: MyString
+  quantity_kg: 9.99
+  rate_per_kg: 9.99
+  total_amount: 9.99
+  notes: MyText

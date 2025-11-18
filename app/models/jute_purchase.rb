@@ -1,0 +1,2 @@
+class JutePurchase < ApplicationRecord
+end

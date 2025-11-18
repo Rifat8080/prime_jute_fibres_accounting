@@ -1,0 +1,2 @@
+class SalesContract < ApplicationRecord
+end

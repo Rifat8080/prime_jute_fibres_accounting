@@ -1,0 +1,2 @@
+class StockMovement < ApplicationRecord
+end

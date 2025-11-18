@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shipment_date: 2025-11-18
+  invoice_number: MyString
+  total_bales: 1
+  total_value: 9.99
+  destination_port: MyString
+  status: MyString
+
+two:
+  shipment_date: 2025-11-18
+  invoice_number: MyString
+  total_bales: 1
+  total_value: 9.99
+  destination_port: MyString
+  status: MyString

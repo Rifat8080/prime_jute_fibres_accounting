@@ -1,0 +1,2 @@
+class ProcurementCost < ApplicationRecord
+end

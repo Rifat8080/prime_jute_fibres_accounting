@@ -1,0 +1,2 @@
+class StockHouse < ApplicationRecord
+end
