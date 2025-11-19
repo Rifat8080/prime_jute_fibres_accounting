@@ -24,6 +24,33 @@
   <body>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
-    <%= yield %>
+
+    <div style="display: flex;">
+      <div style="width: 200px; padding: 10px; border-right: 1px solid #ccc;">
+        <h2>Navigation</h2>
+        <ul>
+          <li><%= link_to 'Home', root_path %></li>
+          <li><%= link_to 'Suppliers', suppliers_path %></li>
+          <li><%= link_to 'Stock Houses', stock_houses_path %></li>
+
+          <li><%= link_to 'Jute Purchases', jute_purchases_path %></li>
+          <li><%= link_to 'Procurement Costs', procurement_costs_path %></li>
+          <li><%= link_to 'Jute Stocks', jute_stocks_path %></li>
+          <li><%= link_to 'Stock Movements', stock_movements_path %></li>
+          <li><%= link_to 'Employees', employees_path %></li>
+          <li><%= link_to 'Salaries', salaries_path %></li>
+          <li><%= link_to 'Accounts', accounts_path %></li>
+          <li><%= link_to 'Transactions', transactions_path %></li>
+          <li><%= link_to 'Buyers', buyers_path %></li>
+          <li><%= link_to 'Sales Contracts', sales_contracts_path %></li>
+          <li><%= link_to 'Shipments', shipments_path %></li>
+          <li><%= link_to 'Export Costs', export_costs_path %></li>
+          <li><%= link_to 'Shipment Documents', shipment_documents_path %></li>
+        </ul>
+      </div>
+      <div style="flex-grow: 1; padding: 10px;">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>

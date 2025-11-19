@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Transaction</h1>
+
+<p>
+  <strong>Account:</strong>
+  <%= @transaction.account.name %>
+</p>
+
+<p>
+  <strong>Related entity:</strong>
+  <%= @transaction.related_entity_type %>: <%= @transaction.related_entity_id %>
+</p>
+
+<p>
+  <strong>Transaction date:</strong>
+  <%= @transaction.transaction_date %>
+</p>
+
+<p>
+  <strong>Transaction type:</strong>
+  <%= @transaction.transaction_type %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @transaction.amount %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @transaction.description %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @transaction.category %>
+</p>
+
+<%= link_to 'Edit', edit_transaction_path(@transaction) %> |
+<%= link_to 'Back', transactions_path %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Procurement Cost</h1>
+
+<p>
+  <strong>Costable:</strong>
+  <%= @procurement_cost.costable_type %>: <%= @procurement_cost.costable_id %>
+</p>
+
+<p>
+  <strong>Cost type:</strong>
+  <%= @procurement_cost.cost_type %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @procurement_cost.amount %>
+</p>
+
+<p>
+  <strong>Cost date:</strong>
+  <%= @procurement_cost.cost_date %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @procurement_cost.description %>
+</p>
+
+<%= link_to 'Edit', edit_procurement_cost_path(@procurement_cost) %> |
+<%= link_to 'Back', procurement_costs_path %>

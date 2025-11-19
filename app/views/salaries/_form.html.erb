@@ -1,0 +1,47 @@
+<%= form_with(model: salary, local: true) do |form| %>
+  <% if salary.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(salary.errors.count, "error") %> prohibited this salary from being saved:</h2>
+
+      <ul>
+        <% salary.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :employee_id %>
+    <%= form.collection_select :employee_id, Employee.all, :id, :name, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_date %>
+    <%= form.date_field :payment_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.text_field :amount %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_period_start %>
+    <%= form.date_field :payment_period_start %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_period_end %>
+    <%= form.date_field :payment_period_end %>
+  </div>
+
+  <div class="field">
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

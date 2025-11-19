@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Stock House</h1>
+
+<p>
+  <strong>Name:</strong>
+  <%= @stock_house.name %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @stock_house.location %>
+</p>
+
+<%= link_to 'Edit', edit_stock_house_path(@stock_house) %> |
+<%= link_to 'Back', stock_houses_path %>

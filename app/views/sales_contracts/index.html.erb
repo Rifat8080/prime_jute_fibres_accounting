@@ -1,0 +1,32 @@
+<h1>Sales Contracts</h1>
+
+<div id="sales_contracts">
+  <table>
+    <thead>
+      <tr>
+        <th>Buyer</th>
+        <th>Contract type</th>
+        <th>Contract number</th>
+        <th>Contract date</th>
+        <th>Details</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sales_contracts.each do |sales_contract| %>
+        <tr>
+          <td><%= sales_contract.buyer.company_name %></td>
+          <td><%= sales_contract.contract_type %></td>
+          <td><%= sales_contract.contract_number %></td>
+          <td><%= sales_contract.contract_date %></td>
+          <td><%= sales_contract.details %></td>
+          <td><%= link_to 'Show', sales_contract %></td>
+          <td><%= link_to 'Edit', edit_sales_contract_path(sales_contract) %></td>
+          <td><%= link_to 'Destroy', sales_contract, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New sales contract', new_sales_contract_path %>

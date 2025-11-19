@@ -1,0 +1,26 @@
+<h1>Stock Houses</h1>
+
+<div id="stock_houses">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @stock_houses.each do |stock_house| %>
+        <tr>
+          <td><%= stock_house.name %></td>
+          <td><%= stock_house.location %></td>
+          <td><%= link_to 'Show', stock_house %></td>
+          <td><%= link_to 'Edit', edit_stock_house_path(stock_house) %></td>
+          <td><%= link_to 'Destroy', stock_house, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New stock house', new_stock_house_path %>

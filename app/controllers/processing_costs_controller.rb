@@ -1,2 +1,0 @@
-class ProcessingCostsController < ApplicationController
-end

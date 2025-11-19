@@ -1,0 +1,36 @@
+<h1>Shipments</h1>
+
+<div id="shipments">
+  <table>
+    <thead>
+      <tr>
+        <th>Sales contract</th>
+        <th>Shipment date</th>
+        <th>Invoice number</th>
+        <th>Total bales</th>
+        <th>Total value</th>
+        <th>Destination port</th>
+        <th>Status</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @shipments.each do |shipment| %>
+        <tr>
+          <td><%= shipment.sales_contract.contract_number %></td>
+          <td><%= shipment.shipment_date %></td>
+          <td><%= shipment.invoice_number %></td>
+          <td><%= shipment.total_bales %></td>
+          <td><%= shipment.total_value %></td>
+          <td><%= shipment.destination_port %></td>
+          <td><%= shipment.status %></td>
+          <td><%= link_to 'Show', shipment %></td>
+          <td><%= link_to 'Edit', edit_shipment_path(shipment) %></td>
+          <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New shipment', new_shipment_path %>

@@ -1,0 +1,30 @@
+<h1>Jute Stocks</h1>
+
+<div id="jute_stocks">
+  <table>
+    <thead>
+      <tr>
+        <th>Stock house</th>
+        <th>Jute quality</th>
+        <th>Quantity bales</th>
+        <th>Last updated</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @jute_stocks.each do |jute_stock| %>
+        <tr>
+          <td><%= jute_stock.stock_house.name %></td>
+          <td><%= jute_stock.jute_quality %></td>
+          <td><%= jute_stock.quantity_bales %></td>
+          <td><%= jute_stock.last_updated %></td>
+          <td><%= link_to 'Show', jute_stock %></td>
+          <td><%= link_to 'Edit', edit_jute_stock_path(jute_stock) %></td>
+          <td><%= link_to 'Destroy', jute_stock, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New jute stock', new_jute_stock_path %>

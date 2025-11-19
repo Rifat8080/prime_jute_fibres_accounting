@@ -1,0 +1,52 @@
+<%= form_with(model: jute_purchase, local: true) do |form| %>
+  <% if jute_purchase.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(jute_purchase.errors.count, "error") %> prohibited this jute_purchase from being saved:</h2>
+
+      <ul>
+        <% jute_purchase.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :supplier_id %>
+    <%= form.collection_select :supplier_id, Supplier.all, :id, :name, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :purchase_date %>
+    <%= form.date_field :purchase_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :jute_variety %>
+    <%= form.text_field :jute_variety %>
+  </div>
+
+  <div class="field">
+    <%= form.label :quantity_kg %>
+    <%= form.text_field :quantity_kg %>
+  </div>
+
+  <div class="field">
+    <%= form.label :rate_per_kg %>
+    <%= form.text_field :rate_per_kg %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total_amount %>
+    <%= form.text_field :total_amount %>
+  </div>
+
+  <div class="field">
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

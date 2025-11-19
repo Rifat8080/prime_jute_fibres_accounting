@@ -1,0 +1,34 @@
+<h1>Salaries</h1>
+
+<div id="salaries">
+  <table>
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Payment date</th>
+        <th>Amount</th>
+        <th>Payment period start</th>
+        <th>Payment period end</th>
+        <th>Notes</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @salaries.each do |salary| %>
+        <tr>
+          <td><%= salary.employee.name %></td>
+          <td><%= salary.payment_date %></td>
+          <td><%= salary.amount %></td>
+          <td><%= salary.payment_period_start %></td>
+          <td><%= salary.payment_period_end %></td>
+          <td><%= salary.notes %></td>
+          <td><%= link_to 'Show', salary %></td>
+          <td><%= link_to 'Edit', edit_salary_path(salary) %></td>
+          <td><%= link_to 'Destroy', salary, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New salary', new_salary_path %>

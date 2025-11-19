@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Shipment</h1>
+
+<p>
+  <strong>Sales contract:</strong>
+  <%= @shipment.sales_contract.contract_number %>
+</p>
+
+<p>
+  <strong>Shipment date:</strong>
+  <%= @shipment.shipment_date %>
+</p>
+
+<p>
+  <strong>Invoice number:</strong>
+  <%= @shipment.invoice_number %>
+</p>
+
+<p>
+  <strong>Total bales:</strong>
+  <%= @shipment.total_bales %>
+</p>
+
+<p>
+  <strong>Total value:</strong>
+  <%= @shipment.total_value %>
+</p>
+
+<p>
+  <strong>Destination port:</strong>
+  <%= @shipment.destination_port %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @shipment.status %>
+</p>
+
+<%= link_to 'Edit', edit_shipment_path(@shipment) %> |
+<%= link_to 'Back', shipments_path %>

@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Salary</h1>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @salary.employee.name %>
+</p>
+
+<p>
+  <strong>Payment date:</strong>
+  <%= @salary.payment_date %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @salary.amount %>
+</p>
+
+<p>
+  <strong>Payment period start:</strong>
+  <%= @salary.payment_period_start %>
+</p>
+
+<p>
+  <strong>Payment period end:</strong>
+  <%= @salary.payment_period_end %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @salary.notes %>
+</p>
+
+<%= link_to 'Edit', edit_salary_path(@salary) %> |
+<%= link_to 'Back', salaries_path %>

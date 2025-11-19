@@ -1,0 +1,37 @@
+<%= form_with(model: export_cost, local: true) do |form| %>
+  <% if export_cost.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(export_cost.errors.count, "error") %> prohibited this export_cost from being saved:</h2>
+
+      <ul>
+        <% export_cost.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :shipment_id %>
+    <%= form.collection_select :shipment_id, Shipment.all, :id, :invoice_number, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cost_type %>
+    <%= form.text_field :cost_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.text_field :amount %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

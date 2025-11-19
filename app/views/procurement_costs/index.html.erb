@@ -1,0 +1,32 @@
+<h1>Procurement Costs</h1>
+
+<div id="procurement_costs">
+  <table>
+    <thead>
+      <tr>
+        <th>Costable</th>
+        <th>Cost type</th>
+        <th>Amount</th>
+        <th>Cost date</th>
+        <th>Description</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @procurement_costs.each do |procurement_cost| %>
+        <tr>
+          <td><%= procurement_cost.costable_type %>: <%= procurement_cost.costable_id %></td>
+          <td><%= procurement_cost.cost_type %></td>
+          <td><%= procurement_cost.amount %></td>
+          <td><%= procurement_cost.cost_date %></td>
+          <td><%= procurement_cost.description %></td>
+          <td><%= link_to 'Show', procurement_cost %></td>
+          <td><%= link_to 'Edit', edit_procurement_cost_path(procurement_cost) %></td>
+          <td><%= link_to 'Destroy', procurement_cost, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New procurement cost', new_procurement_cost_path %>

@@ -1,0 +1,42 @@
+<%= form_with(model: sales_contract, local: true) do |form| %>
+  <% if sales_contract.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sales_contract.errors.count, "error") %> prohibited this sales_contract from being saved:</h2>
+
+      <ul>
+        <% sales_contract.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :buyer_id %>
+    <%= form.collection_select :buyer_id, Buyer.all, :id, :company_name, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contract_type %>
+    <%= form.text_field :contract_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contract_number %>
+    <%= form.text_field :contract_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contract_date %>
+    <%= form.date_field :contract_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :details %>
+    <%= form.text_area :details %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

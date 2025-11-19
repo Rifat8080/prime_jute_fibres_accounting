@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Export Cost</h1>
+
+<p>
+  <strong>Shipment:</strong>
+  <%= @export_cost.shipment.invoice_number %>
+</p>
+
+<p>
+  <strong>Cost type:</strong>
+  <%= @export_cost.cost_type %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @export_cost.amount %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @export_cost.description %>
+</p>
+
+<%= link_to 'Edit', edit_export_cost_path(@export_cost) %> |
+<%= link_to 'Back', export_costs_path %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sales Contract</h1>
+
+<p>
+  <strong>Buyer:</strong>
+  <%= @sales_contract.buyer.company_name %>
+</p>
+
+<p>
+  <strong>Contract type:</strong>
+  <%= @sales_contract.contract_type %>
+</p>
+
+<p>
+  <strong>Contract number:</strong>
+  <%= @sales_contract.contract_number %>
+</p>
+
+<p>
+  <strong>Contract date:</strong>
+  <%= @sales_contract.contract_date %>
+</p>
+
+<p>
+  <strong>Details:</strong>
+  <%= @sales_contract.details %>
+</p>
+
+<%= link_to 'Edit', edit_sales_contract_path(@sales_contract) %> |
+<%= link_to 'Back', sales_contracts_path %>

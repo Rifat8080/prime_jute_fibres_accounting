@@ -1,0 +1,47 @@
+<%= form_with(model: procurement_cost, local: true) do |form| %>
+  <% if procurement_cost.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(procurement_cost.errors.count, "error") %> prohibited this procurement_cost from being saved:</h2>
+
+      <ul>
+        <% procurement_cost.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :costable_type %>
+    <%= form.text_field :costable_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :costable_id %>
+    <%= form.text_field :costable_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cost_type %>
+    <%= form.text_field :cost_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.text_field :amount %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cost_date %>
+    <%= form.date_field :cost_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,37 @@
+<%= form_with(model: shipment_document, local: true) do |form| %>
+  <% if shipment_document.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(shipment_document.errors.count, "error") %> prohibited this shipment_document from being saved:</h2>
+
+      <ul>
+        <% shipment_document.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :shipment_id %>
+    <%= form.collection_select :shipment_id, Shipment.all, :id, :invoice_number, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :document_type %>
+    <%= form.text_field :document_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <div class="field">
+    <%= form.label :file %>
+    <%= form.file_field :file %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

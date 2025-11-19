@@ -1,0 +1,34 @@
+<h1>Shipment Documents</h1>
+
+<div id="shipment_documents">
+  <table>
+    <thead>
+      <tr>
+        <th>Shipment</th>
+        <th>Document type</th>
+        <th>Notes</th>
+        <th>File</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @shipment_documents.each do |shipment_document| %>
+        <tr>
+          <td><%= shipment_document.shipment.invoice_number %></td>
+          <td><%= shipment_document.document_type %></td>
+          <td><%= shipment_document.notes %></td>
+          <td>
+            <% if shipment_document.file.attached? %>
+              <%= link_to 'Download', rails_blob_path(shipment_document.file, disposition: 'attachment') %>
+            <% end %>
+          </td>
+          <td><%= link_to 'Show', shipment_document %></td>
+          <td><%= link_to 'Edit', edit_shipment_document_path(shipment_document) %></td>
+          <td><%= link_to 'Destroy', shipment_document, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'New shipment document', new_shipment_document_path %>

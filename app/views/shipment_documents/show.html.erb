@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Shipment Document</h1>
+
+<p>
+  <strong>Shipment:</strong>
+  <%= @shipment_document.shipment.invoice_number %>
+</p>
+
+<p>
+  <strong>Document type:</strong>
+  <%= @shipment_document.document_type %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @shipment_document.notes %>
+</p>
+
+<p>
+  <strong>File:</strong>
+  <% if @shipment_document.file.attached? %>
+    <%= link_to @shipment_document.file.filename, rails_blob_path(@shipment_document.file, disposition: 'attachment') %>
+  <% else %>
+    No file attached.
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_shipment_document_path(@shipment_document) %> |
+<%= link_to 'Back', shipment_documents_path %>

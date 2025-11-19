@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Stock Movement</h1>
+
+<p>
+  <strong>Jute stock:</strong>
+  <%= @stock_movement.jute_stock.jute_quality %>
+</p>
+
+<p>
+  <strong>Source:</strong>
+  <%= @stock_movement.source_type %>: <%= @stock_movement.source_id %>
+</p>
+
+<p>
+  <strong>Movement type:</strong>
+  <%= @stock_movement.movement_type %>
+</p>
+
+<p>
+  <strong>Quantity bales:</strong>
+  <%= @stock_movement.quantity_bales %>
+</p>
+
+<p>
+  <strong>Movement date:</strong>
+  <%= @stock_movement.movement_date %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @stock_movement.notes %>
+</p>
+
+<%= link_to 'Edit', edit_stock_movement_path(@stock_movement) %> |
+<%= link_to 'Back', stock_movements_path %>

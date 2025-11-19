@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Jute Stock</h1>
+
+<p>
+  <strong>Stock house:</strong>
+  <%= @jute_stock.stock_house.name %>
+</p>
+
+<p>
+  <strong>Jute quality:</strong>
+  <%= @jute_stock.jute_quality %>
+</p>
+
+<p>
+  <strong>Quantity bales:</strong>
+  <%= @jute_stock.quantity_bales %>
+</p>
+
+<p>
+  <strong>Last updated:</strong>
+  <%= @jute_stock.last_updated %>
+</p>
+
+<%= link_to 'Edit', edit_jute_stock_path(@jute_stock) %> |
+<%= link_to 'Back', jute_stocks_path %>
