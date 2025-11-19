@@ -11,15 +11,8 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :costable_type %>
-    <%= form.text_field :costable_type %>
-  </div>
-
-  <div class="field">
-    <%= form.label :costable_id %>
-    <%= form.text_field :costable_id %>
-  </div>
+  <%= form.hidden_field :costable_type %>
+  <%= form.hidden_field :costable_id %>
 
   <div class="field">
     <%= form.label :cost_type %>
