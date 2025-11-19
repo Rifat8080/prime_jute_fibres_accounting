@@ -17,6 +17,16 @@
   </div>
 
   <div class="field">
+    <%= form.label :stock_house_id %>
+    <%= form.collection_select :stock_house_id, StockHouse.all, :id, :name, prompt: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :jute_quality %>
+    <%= form.text_field :jute_quality %>
+  </div>
+
+  <div class="field">
     <%= form.label :shipment_date %>
     <%= form.date_field :shipment_date %>
   </div>

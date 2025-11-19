@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_18_130733) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_19_095402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -94,6 +94,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_130733) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "stock_house_id"
+    t.index ["stock_house_id"], name: "index_jute_purchases_on_stock_house_id"
     t.index ["supplier_id"], name: "index_jute_purchases_on_supplier_id"
   end
 
@@ -171,7 +173,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_130733) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "jute_quality"
+    t.uuid "stock_house_id"
     t.index ["sales_contract_id"], name: "index_shipments_on_sales_contract_id"
+    t.index ["stock_house_id"], name: "index_shipments_on_stock_house_id"
   end
 
   create_table "stock_houses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -235,12 +240,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_130733) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "export_costs", "shipments"
+  add_foreign_key "jute_purchases", "stock_houses"
   add_foreign_key "jute_purchases", "suppliers"
   add_foreign_key "jute_stocks", "stock_houses"
   add_foreign_key "salaries", "employees"
   add_foreign_key "sales_contracts", "buyers"
   add_foreign_key "shipment_documents", "shipments"
   add_foreign_key "shipments", "sales_contracts"
+  add_foreign_key "shipments", "stock_houses"
   add_foreign_key "stock_movements", "jute_stocks"
   add_foreign_key "transactions", "accounts"
 end
