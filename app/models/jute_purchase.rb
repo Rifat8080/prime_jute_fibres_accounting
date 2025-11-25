@@ -30,9 +30,9 @@ class JutePurchase < ApplicationRecord
   def update_jute_stock_on_save
     quantity_change_kg = if new_record?
                            self.quantity_kg
-                         else
+    else
                            self.quantity_kg - (old_quantity_kg || 0)
-                         end
+    end
     adjust_jute_stock(quantity_change_kg)
   end
 

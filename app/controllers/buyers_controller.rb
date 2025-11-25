@@ -1,5 +1,5 @@
 class BuyersController < ApplicationController
-  before_action :set_buyer, only: [:show, :edit, :update, :destroy]
+  before_action :set_buyer, only: [ :show, :edit, :update, :destroy ]
 
   # GET /buyers
   def index
@@ -24,7 +24,7 @@ class BuyersController < ApplicationController
     @buyer = Buyer.new(buyer_params)
 
     if @buyer.save
-      redirect_to @buyer, notice: 'Buyer was successfully created.'
+      redirect_to @buyer, notice: "Buyer was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class BuyersController < ApplicationController
   # PATCH/PUT /buyers/1
   def update
     if @buyer.update(buyer_params)
-      redirect_to @buyer, notice: 'Buyer was successfully updated.'
+      redirect_to @buyer, notice: "Buyer was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class BuyersController < ApplicationController
   # DELETE /buyers/1
   def destroy
     @buyer.destroy
-    redirect_to buyers_url, notice: 'Buyer was successfully destroyed.'
+    redirect_to buyers_url, notice: "Buyer was successfully destroyed."
   end
 
   private

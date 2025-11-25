@@ -1,5 +1,5 @@
 class JutePurchasesController < ApplicationController
-  before_action :set_jute_purchase, only: [:show, :edit, :update, :destroy]
+  before_action :set_jute_purchase, only: [ :show, :edit, :update, :destroy ]
 
   # GET /jute_purchases
   def index
@@ -24,7 +24,7 @@ class JutePurchasesController < ApplicationController
     @jute_purchase = JutePurchase.new(jute_purchase_params)
 
     if @jute_purchase.save
-      redirect_to @jute_purchase, notice: 'Jute purchase was successfully created.'
+      redirect_to @jute_purchase, notice: "Jute purchase was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class JutePurchasesController < ApplicationController
   # PATCH/PUT /jute_purchases/1
   def update
     if @jute_purchase.update(jute_purchase_params)
-      redirect_to @jute_purchase, notice: 'Jute purchase was successfully updated.'
+      redirect_to @jute_purchase, notice: "Jute purchase was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class JutePurchasesController < ApplicationController
   # DELETE /jute_purchases/1
   def destroy
     @jute_purchase.destroy
-    redirect_to jute_purchases_url, notice: 'Jute purchase was successfully destroyed.'
+    redirect_to jute_purchases_url, notice: "Jute purchase was successfully destroyed."
   end
 
   private

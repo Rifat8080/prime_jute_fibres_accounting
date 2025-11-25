@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+  before_action :set_transaction, only: [ :show, :edit, :update, :destroy ]
 
   # GET /transactions
   def index
@@ -24,7 +24,7 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.new(transaction_params)
 
     if @transaction.save
-      redirect_to @transaction, notice: 'Transaction was successfully created.'
+      redirect_to @transaction, notice: "Transaction was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1
   def update
     if @transaction.update(transaction_params)
-      redirect_to @transaction, notice: 'Transaction was successfully updated.'
+      redirect_to @transaction, notice: "Transaction was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1
   def destroy
     @transaction.destroy
-    redirect_to transactions_url, notice: 'Transaction was successfully destroyed.'
+    redirect_to transactions_url, notice: "Transaction was successfully destroyed."
   end
 
   private

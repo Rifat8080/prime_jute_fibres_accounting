@@ -1,5 +1,5 @@
 class SalesContractsController < ApplicationController
-  before_action :set_sales_contract, only: [:show, :edit, :update, :destroy]
+  before_action :set_sales_contract, only: [ :show, :edit, :update, :destroy ]
 
   # GET /sales_contracts
   def index
@@ -24,7 +24,7 @@ class SalesContractsController < ApplicationController
     @sales_contract = SalesContract.new(sales_contract_params)
 
     if @sales_contract.save
-      redirect_to @sales_contract, notice: 'Sales contract was successfully created.'
+      redirect_to @sales_contract, notice: "Sales contract was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class SalesContractsController < ApplicationController
   # PATCH/PUT /sales_contracts/1
   def update
     if @sales_contract.update(sales_contract_params)
-      redirect_to @sales_contract, notice: 'Sales contract was successfully updated.'
+      redirect_to @sales_contract, notice: "Sales contract was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class SalesContractsController < ApplicationController
   # DELETE /sales_contracts/1
   def destroy
     @sales_contract.destroy
-    redirect_to sales_contracts_url, notice: 'Sales contract was successfully destroyed.'
+    redirect_to sales_contracts_url, notice: "Sales contract was successfully destroyed."
   end
 
   private

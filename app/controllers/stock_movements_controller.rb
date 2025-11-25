@@ -1,5 +1,5 @@
 class StockMovementsController < ApplicationController
-  before_action :set_stock_movement, only: [:show, :edit, :update, :destroy]
+  before_action :set_stock_movement, only: [ :show, :edit, :update, :destroy ]
 
   # GET /stock_movements
   def index
@@ -24,7 +24,7 @@ class StockMovementsController < ApplicationController
     @stock_movement = StockMovement.new(stock_movement_params)
 
     if @stock_movement.save
-      redirect_to @stock_movement, notice: 'Stock movement was successfully created.'
+      redirect_to @stock_movement, notice: "Stock movement was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class StockMovementsController < ApplicationController
   # PATCH/PUT /stock_movements/1
   def update
     if @stock_movement.update(stock_movement_params)
-      redirect_to @stock_movement, notice: 'Stock movement was successfully updated.'
+      redirect_to @stock_movement, notice: "Stock movement was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class StockMovementsController < ApplicationController
   # DELETE /stock_movements/1
   def destroy
     @stock_movement.destroy
-    redirect_to stock_movements_url, notice: 'Stock movement was successfully destroyed.'
+    redirect_to stock_movements_url, notice: "Stock movement was successfully destroyed."
   end
 
   private

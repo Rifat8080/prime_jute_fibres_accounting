@@ -28,9 +28,9 @@ class Shipment < ApplicationRecord
   def update_jute_stock_on_save
     bales_to_adjust = if new_record?
                            -self.total_bales # Deduct for new shipment
-                         else
+    else
                            (old_total_bales || 0) - self.total_bales # Adjust for updated shipment
-                         end
+    end
     adjust_jute_stock(bales_to_adjust)
   end
 

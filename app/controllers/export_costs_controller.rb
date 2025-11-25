@@ -1,5 +1,5 @@
 class ExportCostsController < ApplicationController
-  before_action :set_export_cost, only: [:show, :edit, :update, :destroy]
+  before_action :set_export_cost, only: [ :show, :edit, :update, :destroy ]
 
   # GET /export_costs
   def index
@@ -24,7 +24,7 @@ class ExportCostsController < ApplicationController
     @export_cost = ExportCost.new(export_cost_params)
 
     if @export_cost.save
-      redirect_to @export_cost, notice: 'Export cost was successfully created.'
+      redirect_to @export_cost, notice: "Export cost was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class ExportCostsController < ApplicationController
   # PATCH/PUT /export_costs/1
   def update
     if @export_cost.update(export_cost_params)
-      redirect_to @export_cost, notice: 'Export cost was successfully updated.'
+      redirect_to @export_cost, notice: "Export cost was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class ExportCostsController < ApplicationController
   # DELETE /export_costs/1
   def destroy
     @export_cost.destroy
-    redirect_to export_costs_url, notice: 'Export cost was successfully destroyed.'
+    redirect_to export_costs_url, notice: "Export cost was successfully destroyed."
   end
 
   private

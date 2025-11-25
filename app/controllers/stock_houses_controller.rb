@@ -1,5 +1,5 @@
 class StockHousesController < ApplicationController
-  before_action :set_stock_house, only: [:show, :edit, :update, :destroy]
+  before_action :set_stock_house, only: [ :show, :edit, :update, :destroy ]
 
   # GET /stock_houses
   def index
@@ -24,7 +24,7 @@ class StockHousesController < ApplicationController
     @stock_house = StockHouse.new(stock_house_params)
 
     if @stock_house.save
-      redirect_to @stock_house, notice: 'Stock house was successfully created.'
+      redirect_to @stock_house, notice: "Stock house was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class StockHousesController < ApplicationController
   # PATCH/PUT /stock_houses/1
   def update
     if @stock_house.update(stock_house_params)
-      redirect_to @stock_house, notice: 'Stock house was successfully updated.'
+      redirect_to @stock_house, notice: "Stock house was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class StockHousesController < ApplicationController
   # DELETE /stock_houses/1
   def destroy
     @stock_house.destroy
-    redirect_to stock_houses_url, notice: 'Stock house was successfully destroyed.'
+    redirect_to stock_houses_url, notice: "Stock house was successfully destroyed."
   end
 
   private

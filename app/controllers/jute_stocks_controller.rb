@@ -1,5 +1,5 @@
 class JuteStocksController < ApplicationController
-  before_action :set_jute_stock, only: [:show, :edit, :update, :destroy]
+  before_action :set_jute_stock, only: [ :show, :edit, :update, :destroy ]
 
   # GET /jute_stocks
   def index
@@ -24,7 +24,7 @@ class JuteStocksController < ApplicationController
     @jute_stock = JuteStock.new(jute_stock_params)
 
     if @jute_stock.save
-      redirect_to @jute_stock, notice: 'Jute stock was successfully created.'
+      redirect_to @jute_stock, notice: "Jute stock was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class JuteStocksController < ApplicationController
   # PATCH/PUT /jute_stocks/1
   def update
     if @jute_stock.update(jute_stock_params)
-      redirect_to @jute_stock, notice: 'Jute stock was successfully updated.'
+      redirect_to @jute_stock, notice: "Jute stock was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class JuteStocksController < ApplicationController
   # DELETE /jute_stocks/1
   def destroy
     @jute_stock.destroy
-    redirect_to jute_stocks_url, notice: 'Jute stock was successfully destroyed.'
+    redirect_to jute_stocks_url, notice: "Jute stock was successfully destroyed."
   end
 
   private

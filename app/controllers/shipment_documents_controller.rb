@@ -1,5 +1,5 @@
 class ShipmentDocumentsController < ApplicationController
-  before_action :set_shipment_document, only: [:show, :edit, :update, :destroy]
+  before_action :set_shipment_document, only: [ :show, :edit, :update, :destroy ]
 
   # GET /shipment_documents
   def index
@@ -24,7 +24,7 @@ class ShipmentDocumentsController < ApplicationController
     @shipment_document = ShipmentDocument.new(shipment_document_params)
 
     if @shipment_document.save
-      redirect_to @shipment_document, notice: 'Shipment document was successfully created.'
+      redirect_to @shipment_document, notice: "Shipment document was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class ShipmentDocumentsController < ApplicationController
   # PATCH/PUT /shipment_documents/1
   def update
     if @shipment_document.update(shipment_document_params)
-      redirect_to @shipment_document, notice: 'Shipment document was successfully updated.'
+      redirect_to @shipment_document, notice: "Shipment document was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class ShipmentDocumentsController < ApplicationController
   # DELETE /shipment_documents/1
   def destroy
     @shipment_document.destroy
-    redirect_to shipment_documents_url, notice: 'Shipment document was successfully destroyed.'
+    redirect_to shipment_documents_url, notice: "Shipment document was successfully destroyed."
   end
 
   private

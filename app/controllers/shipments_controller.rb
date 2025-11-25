@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: [:show, :edit, :update, :destroy]
+  before_action :set_shipment, only: [ :show, :edit, :update, :destroy ]
 
   # GET /shipments
   def index
@@ -24,7 +24,7 @@ class ShipmentsController < ApplicationController
     @shipment = Shipment.new(shipment_params)
 
     if @shipment.save
-      redirect_to @shipment, notice: 'Shipment was successfully created.'
+      redirect_to @shipment, notice: "Shipment was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class ShipmentsController < ApplicationController
   # PATCH/PUT /shipments/1
   def update
     if @shipment.update(shipment_params)
-      redirect_to @shipment, notice: 'Shipment was successfully updated.'
+      redirect_to @shipment, notice: "Shipment was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class ShipmentsController < ApplicationController
   # DELETE /shipments/1
   def destroy
     @shipment.destroy
-    redirect_to shipments_url, notice: 'Shipment was successfully destroyed.'
+    redirect_to shipments_url, notice: "Shipment was successfully destroyed."
   end
 
   private
