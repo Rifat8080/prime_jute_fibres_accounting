@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   resources :buyers
   resources :sales_contracts
   resources :shipments
-  resources :export_costs
   resources :shipment_documents
 
   devise_for :users
