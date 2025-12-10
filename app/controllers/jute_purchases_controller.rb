@@ -12,7 +12,7 @@ class JutePurchasesController < ApplicationController
 
   # GET /jute_purchases/new
   def new
-    @jute_purchase = JutePurchase.new
+    @jute_purchase = JutePurchase.new(supplier_id: params[:supplier_id], stock_house_id: params[:stock_house_id])
   end
 
   # GET /jute_purchases/1/edit

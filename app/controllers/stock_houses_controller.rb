@@ -13,6 +13,7 @@ class StockHousesController < ApplicationController
   # GET /stock_houses/new
   def new
     @stock_house = StockHouse.new
+    @redirect_to_jute_purchase = params[:redirect_to_jute_purchase]
   end
 
   # GET /stock_houses/1/edit
@@ -23,10 +24,14 @@ class StockHousesController < ApplicationController
   def create
     @stock_house = StockHouse.new(stock_house_params)
 
-    if @stock_house.save
-      redirect_to @stock_house, notice: "Stock house was successfully created."
-    else
-      render :new
+    respond_to do |format|
+      if @stock_house.save
+        format.html { redirect_to @stock_house, notice: "Stock house was successfully created." }
+        format.json { render :show, status: :created, location: @stock_house }
+      else
+        format.html { render :new }
+        format.json { render json: @stock_house.errors, status: :unprocessable_entity }
+      end
     end
   end
 

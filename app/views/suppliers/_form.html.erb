@@ -1,16 +1,3 @@
-<%= form_with(model: supplier, local: true) do |form| %>
-  <% if supplier.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(supplier.errors.count, "error") %> prohibited this supplier from being saved:</h2>
-
-      <ul>
-        <% supplier.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -39,4 +26,3 @@
   <div class="actions">
     <%= form.submit %>
   </div>
-<% end %>

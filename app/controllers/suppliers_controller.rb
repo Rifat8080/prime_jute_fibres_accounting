@@ -13,6 +13,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers/new
   def new
     @supplier = Supplier.new
+    @redirect_to_jute_purchase = params[:redirect_to_jute_purchase]
   end
 
   # GET /suppliers/1/edit
@@ -23,10 +24,14 @@ class SuppliersController < ApplicationController
   def create
     @supplier = Supplier.new(supplier_params)
 
-    if @supplier.save
-      redirect_to @supplier, notice: "Supplier was successfully created."
-    else
-      render :new
+    respond_to do |format|
+      if @supplier.save
+        format.html { redirect_to @supplier, notice: "Supplier was successfully created." }
+        format.json { render :show, status: :created, location: @supplier }
+      else
+        format.html { render :new }
+        format.json { render json: @supplier.errors, status: :unprocessable_entity }
+      end
     end
   end
 

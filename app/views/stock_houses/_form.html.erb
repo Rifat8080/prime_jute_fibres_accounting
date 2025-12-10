@@ -1,16 +1,3 @@
-<%= form_with(model: stock_house, local: true) do |form| %>
-  <% if stock_house.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(stock_house.errors.count, "error") %> prohibited this stock_house from being saved:</h2>
-
-      <ul>
-        <% stock_house.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -24,4 +11,3 @@
   <div class="actions">
     <%= form.submit %>
   </div>
-<% end %>
