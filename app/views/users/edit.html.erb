@@ -1,0 +1,9 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="font-bold text-4xl">Edit User</h1>
+  </div>
+
+  <%= render 'form', user: @user %>
+
+  <%= link_to 'Back', users_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+</div>

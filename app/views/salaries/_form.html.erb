@@ -1,47 +1,47 @@
-<%= form_with(model: salary, local: true) do |form| %>
+<%= form_with(model: salary, class: "contents") do |form| %>
   <% if salary.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
       <h2><%= pluralize(salary.errors.count, "error") %> prohibited this salary from being saved:</h2>
 
-      <ul>
-        <% salary.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+      <ul class="list-disc ml-6">
+        <% salary.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :employee_id %>
-    <%= form.collection_select :employee_id, Employee.all, :id, :name, prompt: true %>
+  <div class="my-5">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:user_id].none?, "border-red-400 focus:outline-red-600": salary.errors[:user_id].any?}] %>
   </div>
 
-  <div class="field">
+  <div class="my-5">
     <%= form.label :payment_date %>
-    <%= form.date_field :payment_date %>
+    <%= form.date_field :payment_date, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:payment_date].none?, "border-red-400 focus:outline-red-600": salary.errors[:payment_date].any?}] %>
   </div>
 
-  <div class="field">
+  <div class="my-5">
     <%= form.label :amount %>
-    <%= form.text_field :amount %>
+    <%= form.text_field :amount, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:amount].none?, "border-red-400 focus:outline-red-600": salary.errors[:amount].any?}] %>
   </div>
 
-  <div class="field">
+  <div class="my-5">
     <%= form.label :payment_period_start %>
-    <%= form.date_field :payment_period_start %>
+    <%= form.date_field :payment_period_start, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:payment_period_start].none?, "border-red-400 focus:outline-red-600": salary.errors[:payment_period_start].any?}] %>
   </div>
 
-  <div class="field">
+  <div class="my-5">
     <%= form.label :payment_period_end %>
-    <%= form.date_field :payment_period_end %>
+    <%= form.date_field :payment_period_end, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:payment_period_end].none?, "border-red-400 focus:outline-red-600": salary.errors[:payment_period_end].any?}] %>
   </div>
 
-  <div class="field">
+  <div class="my-5">
     <%= form.label :notes %>
-    <%= form.text_area :notes %>
+    <%= form.textarea :notes, rows: 4, class: ["block shadow rounded-md border outline-none px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": salary.errors[:notes].none?, "border-red-400 focus:outline-red-600": salary.errors[:notes].any?}] %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
   </div>
 <% end %>

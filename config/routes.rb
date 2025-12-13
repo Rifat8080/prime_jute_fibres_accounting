@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   resources :jute_stocks
   resources :stock_movements
 
-  resources :employees
   resources :salaries
   resources :accounts
   resources :transactions
@@ -14,6 +13,7 @@ Rails.application.routes.draw do
   resources :sales_contracts
   resources :shipments
   resources :shipment_documents
+  resources :users
 
   devise_for :users
   get "posts/index"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_10_053551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -64,16 +64,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "employees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "employee_type"
-    t.string "designation"
-    t.date "join_date"
-    t.string "phone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "jute_purchases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "supplier_id", null: false
     t.date "purchase_date"
@@ -121,7 +111,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
   end
 
   create_table "salaries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "employee_id", null: false
+    t.uuid "user_id", null: false
     t.date "payment_date"
     t.decimal "amount"
     t.date "payment_period_start"
@@ -129,7 +119,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_salaries_on_employee_id"
+    t.index ["user_id"], name: "index_salaries_on_user_id"
   end
 
   create_table "sales_contracts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -223,6 +213,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "phone"
+    t.string "designation"
+    t.string "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -232,7 +226,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_28_121130) do
   add_foreign_key "jute_purchases", "stock_houses"
   add_foreign_key "jute_purchases", "suppliers"
   add_foreign_key "jute_stocks", "stock_houses"
-  add_foreign_key "salaries", "employees"
+  add_foreign_key "salaries", "users"
   add_foreign_key "sales_contracts", "buyers"
   add_foreign_key "shipment_documents", "shipments"
   add_foreign_key "shipments", "sales_contracts"

@@ -1,36 +1,17 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title, "Showing salary" %>
 
-<h1>Salary</h1>
+<div class="md:w-2/3 w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
 
-<p>
-  <strong>Employee:</strong>
-  <%= @salary.employee.name %>
-</p>
+  <h1 class="font-bold text-4xl">Showing salary</h1>
 
-<p>
-  <strong>Payment date:</strong>
-  <%= @salary.payment_date %>
-</p>
+  <%= render @salary %>
 
-<p>
-  <strong>Amount:</strong>
-  <%= @salary.amount %>
-</p>
-
-<p>
-  <strong>Payment period start:</strong>
-  <%= @salary.payment_period_start %>
-</p>
-
-<p>
-  <strong>Payment period end:</strong>
-  <%= @salary.payment_period_end %>
-</p>
-
-<p>
-  <strong>Notes:</strong>
-  <%= @salary.notes %>
-</p>
-
-<%= link_to 'Edit', edit_salary_path(@salary) %> |
-<%= link_to 'Back', salaries_path %>
+  <%= link_to "Edit this salary", edit_salary_path(@salary), class: "mt-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to "Back to salaries", salaries_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="inline-block ml-2">
+    <%= button_to "Destroy this salary", @salary, method: :delete, class: "mt-2 rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium" %>
+  </div>
+</div>

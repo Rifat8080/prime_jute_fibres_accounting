@@ -1,6 +1,10 @@
-<h1>Editing Salary</h1>
+<% content_for :title, "Editing salary" %>
 
-<%= render 'form', salary: @salary %>
+<div class="md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Editing salary</h1>
 
-<%= link_to 'Show', @salary %> |
-<%= link_to 'Back', salaries_path %>
+  <%= render "form", salary: @salary %>
+
+  <%= link_to "Show this salary", @salary, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to "Back to salaries", salaries_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+</div>

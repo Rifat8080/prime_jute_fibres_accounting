@@ -1,12 +1,12 @@
 class SalariesController < ApplicationController
-  before_action :set_salary, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_salary, only: %i[ show edit update destroy ]
 
-  # GET /salaries
+  # GET /salaries or /salaries.json
   def index
     @salaries = Salary.all
   end
 
-  # GET /salaries/1
+  # GET /salaries/1 or /salaries/1.json
   def show
   end
 
@@ -19,40 +19,52 @@ class SalariesController < ApplicationController
   def edit
   end
 
-  # POST /salaries
+  # POST /salaries or /salaries.json
   def create
     @salary = Salary.new(salary_params)
 
-    if @salary.save
-      redirect_to @salary, notice: "Salary was successfully created."
-    else
-      render :new
+    respond_to do |format|
+      if @salary.save
+        format.html { redirect_to @salary, notice: "Salary was successfully created." }
+        format.json { render :show, status: :created, location: @salary }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @salary.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /salaries/1
+  # PATCH/PUT /salaries/1 or /salaries/1.json
   def update
-    if @salary.update(salary_params)
-      redirect_to @salary, notice: "Salary was successfully updated."
-    else
-      render :edit
+    respond_to do |format|
+      if @salary.update(salary_params)
+        format.html { redirect_to @salary, notice: "Salary was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: @salary }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @salary.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # DELETE /salaries/1
+  # DELETE /salaries/1 or /salaries/1.json
   def destroy
-    @salary.destroy
-    redirect_to salaries_url, notice: "Salary was successfully destroyed."
+    @salary.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to salaries_path, notice: "Salary was successfully destroyed.", status: :see_other }
+      format.json { head :no_content }
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_salary
-      @salary = Salary.find(params[:id])
+      @salary = Salary.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def salary_params
-      params.require(:salary).permit(:employee_id, :payment_date, :amount, :payment_period_start, :payment_period_end, :notes)
+      params.expect(salary: [ :user_id, :payment_date, :amount, :payment_period_start, :payment_period_end, :notes ])
     end
 end
