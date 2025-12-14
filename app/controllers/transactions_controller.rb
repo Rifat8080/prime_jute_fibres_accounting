@@ -1,9 +1,10 @@
 class TransactionsController < ApplicationController
+  before_action :set_account
   before_action :set_transaction, only: [ :show, :edit, :update, :destroy ]
 
   # GET /transactions
   def index
-    @transactions = Transaction.all
+    @transactions = @account.transactions
   end
 
   # GET /transactions/1
@@ -12,7 +13,7 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
-    @transaction = Transaction.new
+    @transaction = @account.transactions.new
   end
 
   # GET /transactions/1/edit
@@ -21,10 +22,22 @@ class TransactionsController < ApplicationController
 
   # POST /transactions
   def create
-    @transaction = Transaction.new(transaction_params)
+    # protect against invalid polymorphic type input (e.g. user typed 'jn')
+    tparams = transaction_params.to_h
+    if tparams['related_entity_type'].present? && tparams['related_entity_type'].safe_constantize.nil?
+      @transaction = @account.transactions.new(tparams.except('related_entity_type', 'related_entity_id'))
+      @transaction.errors.add(:related_entity_type, 'is invalid')
+      render :new and return
+    end
+
+    @transaction = @account.transactions.new(tparams)
+    # Ensure polymorphic related fields satisfy DB NOT NULL constraints.
+    # Transactions are scoped to an Account now, so use the account as the related entity.
+    @transaction.related_entity_type ||= 'Account'
+    @transaction.related_entity_id ||= @account.id
 
     if @transaction.save
-      redirect_to @transaction, notice: "Transaction was successfully created."
+      redirect_to [@account, @transaction], notice: "Transaction was successfully created."
     else
       render :new
     end
@@ -32,8 +45,14 @@ class TransactionsController < ApplicationController
 
   # PATCH/PUT /transactions/1
   def update
-    if @transaction.update(transaction_params)
-      redirect_to @transaction, notice: "Transaction was successfully updated."
+    tparams = transaction_params.to_h
+    if tparams['related_entity_type'].present? && tparams['related_entity_type'].safe_constantize.nil?
+      @transaction.errors.add(:related_entity_type, 'is invalid')
+      render :edit and return
+    end
+
+    if @transaction.update(tparams)
+      redirect_to [@account, @transaction], notice: "Transaction was successfully updated."
     else
       render :edit
     end
@@ -42,17 +61,21 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1
   def destroy
     @transaction.destroy
-    redirect_to transactions_url, notice: "Transaction was successfully destroyed."
+    redirect_to account_transactions_url(@account), notice: "Transaction was successfully destroyed."
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
-      @transaction = Transaction.find(params[:id])
+        @transaction = @account.transactions.find(params[:id])
     end
+
+      def set_account
+        @account = Account.find(params[:account_id])
+      end
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:account_id, :related_entity_id, :related_entity_type, :transaction_date, :transaction_type, :amount, :description, :category)
+      params.require(:transaction).permit(:transaction_type, :transaction_reference, :beneficiary, :amount)
     end
 end

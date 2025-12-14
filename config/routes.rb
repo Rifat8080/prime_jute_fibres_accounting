@@ -8,7 +8,9 @@ Rails.application.routes.draw do
 
   resources :salaries
   resources :accounts
-  resources :transactions
+  resources :accounts do
+    resources :transactions
+  end
   resources :buyers
   resources :sales_contracts
   resources :shipments
