@@ -1,7 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :account
 
-  
+
   validates :transaction_type, presence: true, inclusion: { in: %w[debit credit], message: "%{value} is not a valid type" }
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
@@ -11,11 +11,11 @@ class Transaction < ApplicationRecord
   after_destroy :revert_from_account
 
   def credit?
-    transaction_type.to_s.downcase == 'credit'
+    transaction_type.to_s.downcase == "credit"
   end
 
   def debit?
-    transaction_type.to_s.downcase == 'debit'
+    transaction_type.to_s.downcase == "debit"
   end
 
   private
@@ -50,9 +50,9 @@ class Transaction < ApplicationRecord
   def effect_for(type, amt)
     return 0 unless amt
     case type.to_s.downcase
-    when 'credit'
+    when "credit"
       BigDecimal(amt.to_s)
-    when 'debit'
+    when "debit"
       -BigDecimal(amt.to_s)
     else
       # default: treat as credit
