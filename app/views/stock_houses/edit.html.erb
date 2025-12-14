@@ -1,6 +1,8 @@
 <h1>Editing Stock House</h1>
 
-<%= render 'form', stock_house: @stock_house %>
+<%= form_with(model: @stock_house, local: true) do |form| %>
+	<%= render 'form', form: form %>
+<% end %>
 
 <%= link_to 'Show', @stock_house %> |
 <%= link_to 'Back', stock_houses_path %>

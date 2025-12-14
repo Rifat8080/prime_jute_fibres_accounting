@@ -1,14 +1,4 @@
-class CreateStockMovements < ActiveRecord::Migration[8.0]
-  def change
-    create_table :stock_movements, id: :uuid do |t|
-      t.references :jute_stock, null: false, foreign_key: true, type: :uuid
-      t.references :source, polymorphic: true, null: false, type: :uuid
-      t.string :movement_type
-      t.decimal :quantity_bales
-      t.datetime :movement_date
-      t.text :notes
-
-      t.timestamps
-    end
-  end
-end
+# Migration for stock_movements removed.
+# This file is neutralized to prevent creating the table; the StockMovements feature
+# was removed from the codebase. If you need to permanently remove the table from
+# the DB, generate a proper down migration or run SQL to drop the table.

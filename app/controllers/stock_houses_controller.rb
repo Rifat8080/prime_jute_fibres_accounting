@@ -28,6 +28,7 @@ class StockHousesController < ApplicationController
       if @stock_house.save
         format.html { redirect_to @stock_house, notice: "Stock house was successfully created." }
         format.json { render :show, status: :created, location: @stock_house }
+        format.turbo_stream
       else
         format.html { render :new }
         format.json { render json: @stock_house.errors, status: :unprocessable_entity }

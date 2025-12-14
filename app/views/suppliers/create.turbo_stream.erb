@@ -1,0 +1,7 @@
+<%= turbo_stream.append "jute_purchase_supplier_id" do %>
+  <option value="<%= @supplier.id %>" selected><%= j @supplier.name %></option>
+<% end %>
+
+<%= turbo_stream.replace "supplier-modal" do %>
+  <div id="supplier-modal" style="display:none;"></div>
+<% end %>

@@ -24,38 +24,6 @@
     <%# This button opens a modal to create a new stock house %>
     <button type="button" onclick="openModal('stock-house-modal')">New Stock House</button>
   </div>
-
-<div id="supplier-modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('supplier-modal')">&times;</span>
-    <h2>New Supplier</h2>
-    <%= form_with(model: Supplier.new, url: suppliers_path, id: 'new_supplier_form', local: false) do |f| %>
-      <%= render 'suppliers/form', form: f, supplier: Supplier.new %>
-    <% end %>
-  </div>
-</div>
-
-<div id="stock-house-modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('stock-house-modal')">&times;</span>
-    <h2>New Stock House</h2>
-    <%= form_with(model: StockHouse.new, url: stock_houses_path, id: 'new_stock_house_form', local: false) do |f| %>
-      <%= render 'stock_houses/form', form: f, stock_house: StockHouse.new %>
-    <% end %>
-  </div>
-</div>
-
-<script>
-  function openModal(modalId) {
-    document.getElementById(modalId).style.display = 'block';
-  }
-
-  function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-  }
-</script>
-
-
   <div class="field">
     <%= form.label :purchase_date %>
     <%= form.date_field :purchase_date %>
@@ -78,7 +46,8 @@
 
   <div class="field">
     <%= form.label :total_amount %>
-    <%= form.text_field :total_amount %>
+    <%= form.text_field :total_amount, id: 'jute_purchase_total_amount' %>
+    <div>Total: <span id="jute_purchase_total_display"><%= number_with_precision(jute_purchase.total_amount || 0, precision: 2) if defined?(jute_purchase) %></span></div>
   </div>
 
   <div class="field">
@@ -89,4 +58,59 @@
   <div class="actions">
     <%= form.submit %>
   </div>
+  
 <% end %>
+
+<div id="supplier-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('supplier-modal')">&times;</span>
+    <h2>New Supplier</h2>
+    <%= form_with(model: Supplier.new, url: suppliers_path, id: 'new_supplier_form', local: true) do |f| %>
+      <%= render 'suppliers/form', form: f, supplier: Supplier.new %>
+    <% end %>
+  </div>
+</div>
+
+<div id="stock-house-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('stock-house-modal')">&times;</span>
+    <h2>New Stock House</h2>
+    <%= form_with(model: StockHouse.new, url: stock_houses_path, id: 'new_stock_house_form', local: true) do |f| %>
+      <%= render 'stock_houses/form', form: f, stock_house: StockHouse.new %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+</script>
+
+<script>
+  // Compute total when quantity or rate changes
+  function computeJuteTotal() {
+    const qtyEl = document.getElementById('jute_purchase_quantity_kg');
+    const rateEl = document.getElementById('jute_purchase_rate_per_kg');
+    const totalEl = document.getElementById('jute_purchase_total_amount');
+    const displayEl = document.getElementById('jute_purchase_total_display');
+    if (!qtyEl || !rateEl || !totalEl) return;
+    const qty = parseFloat(qtyEl.value) || 0;
+    const rate = parseFloat(rateEl.value) || 0;
+    const total = (qty * rate).toFixed(2);
+    totalEl.value = total;
+    if (displayEl) displayEl.textContent = total;
+  }
+
+  document.addEventListener('input', function(e) {
+    if (['jute_purchase_quantity_kg','jute_purchase_rate_per_kg'].includes(e.target.id)) {
+      computeJuteTotal();
+    }
+  });
+  // initial compute
+  document.addEventListener('turbo:load', computeJuteTotal);
+</script>
