@@ -15,5 +15,4 @@ class JutePurchase < ApplicationRecord
   end
 
   private
-
 end
