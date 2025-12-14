@@ -17,13 +17,7 @@
     <%# This button opens a modal to create a new supplier %>
     <button type="button" onclick="openModal('supplier-modal')">New Supplier</button>
   </div>
-
-  <div class="field">
-    <%= form.label :stock_house_id %>
-    <%= form.collection_select :stock_house_id, StockHouse.all, :id, :name, { prompt: true }, { id: 'jute_purchase_stock_house_id' } %>
-    <%# This button opens a modal to create a new stock house %>
-    <button type="button" onclick="openModal('stock-house-modal')">New Stock House</button>
-  </div>
+  
   <div class="field">
     <%= form.label :purchase_date %>
     <%= form.date_field :purchase_date %>
@@ -67,16 +61,6 @@
     <h2>New Supplier</h2>
     <%= form_with(model: Supplier.new, url: suppliers_path, id: 'new_supplier_form', local: true) do |f| %>
       <%= render 'suppliers/form', form: f, supplier: Supplier.new %>
-    <% end %>
-  </div>
-</div>
-
-<div id="stock-house-modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('stock-house-modal')">&times;</span>
-    <h2>New Stock House</h2>
-    <%= form_with(model: StockHouse.new, url: stock_houses_path, id: 'new_stock_house_form', local: true) do |f| %>
-      <%= render 'stock_houses/form', form: f, stock_house: StockHouse.new %>
     <% end %>
   </div>
 </div>

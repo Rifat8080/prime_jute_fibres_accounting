@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_10_053551) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_14_123000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -74,8 +74,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_10_053551) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "stock_house_id"
-    t.index ["stock_house_id"], name: "index_jute_purchases_on_stock_house_id"
     t.index ["supplier_id"], name: "index_jute_purchases_on_supplier_id"
   end
 
@@ -223,7 +221,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_10_053551) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "jute_purchases", "stock_houses"
   add_foreign_key "jute_purchases", "suppliers"
   add_foreign_key "jute_stocks", "stock_houses"
   add_foreign_key "salaries", "users"

@@ -12,7 +12,7 @@ class JutePurchasesController < ApplicationController
 
   # GET /jute_purchases/new
   def new
-    @jute_purchase = JutePurchase.new(supplier_id: params[:supplier_id], stock_house_id: params[:stock_house_id])
+    @jute_purchase = JutePurchase.new(supplier_id: params[:supplier_id])
   end
 
   # GET /jute_purchases/1/edit
@@ -53,6 +53,6 @@ class JutePurchasesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def jute_purchase_params
-      params.require(:jute_purchase).permit(:supplier_id, :stock_house_id, :purchase_date, :jute_variety, :quantity_kg, :rate_per_kg, :total_amount, :notes)
+      params.require(:jute_purchase).permit(:supplier_id, :purchase_date, :jute_variety, :quantity_kg, :rate_per_kg, :total_amount, :notes)
     end
 end
