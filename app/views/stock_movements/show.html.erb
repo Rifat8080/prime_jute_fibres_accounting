@@ -1,3 +1,32 @@
+<h1>Stock Movement</h1>
+
+<p>
+  <strong>Stock:</strong>
+  <%= @stock_movement.jute_stock&.jute_quality || '—' %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @stock_movement.movement_type %>
+</p>
+
+<p>
+  <strong>Quantity (bales):</strong>
+  <%= @stock_movement.quantity_bales %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @stock_movement.movement_date %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= simple_format(@stock_movement.notes) %>
+</p>
+
+<%= link_to 'Edit', edit_stock_movement_path(@stock_movement) %> |
+<%= link_to 'Back', stock_movements_path %>
 <p id="notice"><%= notice %></p>
 
 <h1>Stock Movement</h1>

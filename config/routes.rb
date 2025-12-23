@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :jute_purchases
   resources :procurement_costs
   resources :jute_stocks
-  # stock_movements removed
+  resources :stock_movements
 
   resources :salaries
   resources :accounts

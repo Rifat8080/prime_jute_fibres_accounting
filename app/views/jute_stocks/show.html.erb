@@ -22,5 +22,40 @@
   <%= @jute_stock.last_updated %>
 </p>
 
+<h2>Stock Movements</h2>
+
+<p>
+  <%= link_to 'View all stock movements for this stock', stock_movements_path(jute_stock_id: @jute_stock.id) %> |
+  <%= link_to 'New stock movement for this stock', new_stock_movement_path(jute_stock_id: @jute_stock.id) %>
+</p>
+
+<% recent = @jute_stock.stock_movements.order(movement_date: :desc).limit(10) %>
+<% if recent.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Quantity</th>
+        <th>Date</th>
+        <th>Notes</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% recent.each do |sm| %>
+        <tr>
+          <td><%= sm.movement_type %></td>
+          <td><%= sm.quantity_bales %></td>
+          <td><%= sm.movement_date %></td>
+          <td><%= truncate(sm.notes, length: 50) %></td>
+          <td><%= link_to 'Show', stock_movement_path(sm) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No stock movements recorded for this stock.</p>
+<% end %>
+
 <%= link_to 'Edit', edit_jute_stock_path(@jute_stock) %> |
 <%= link_to 'Back', jute_stocks_path %>

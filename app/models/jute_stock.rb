@@ -1,6 +1,6 @@
 class JuteStock < ApplicationRecord
   belongs_to :stock_house
-  # removed association to StockMovement (stock movements feature removed)
+  has_many :stock_movements, dependent: :nullify
 
   validates :jute_quality, presence: true
   validates :quantity_bales, presence: true, numericality: { greater_than_or_equal_to: 0 }

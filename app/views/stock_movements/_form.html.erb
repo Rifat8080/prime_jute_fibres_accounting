@@ -1,1 +1,42 @@
+<%= form_with(model: stock_movement, local: true) do |f| %>
+  <% if stock_movement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(stock_movement.errors.count, "error") %> prohibited this record from being saved:</h2>
+      <ul>
+      <% stock_movement.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :jute_stock_id, "Stock" %><br>
+    <%= f.collection_select :jute_stock_id, JuteStock.all.order(:jute_quality), :id, :jute_quality, prompt: "Select stock" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :movement_type %><br>
+    <%= f.select :movement_type, [['Incoming','incoming'], ['Outgoing','outgoing'], ['Transfer','transfer']], prompt: 'Select type' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :quantity_bales %><br>
+    <%= f.number_field :quantity_bales, step: 0.01 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :movement_date %><br>
+    <%= f.date_field :movement_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :notes %><br>
+    <%= f.text_area :notes, rows: 3 %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
 <!-- Stock Movements form removed -->

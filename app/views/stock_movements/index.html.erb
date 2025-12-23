@@ -1,1 +1,33 @@
+<h1>Stock Movements</h1>
+
+<%= link_to 'New Stock Movement', new_stock_movement_path, class: 'button' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stock</th>
+      <th>Type</th>
+      <th>Quantity (bales)</th>
+      <th>Date</th>
+      <th>Notes</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stock_movements.each do |sm| %>
+      <tr>
+        <td><%= sm.jute_stock&.jute_quality || '—' %></td>
+        <td><%= sm.movement_type %></td>
+        <td><%= sm.quantity_bales %></td>
+        <td><%= sm.movement_date %></td>
+        <td><%= truncate(sm.notes, length: 50) %></td>
+        <td>
+          <%= link_to 'Show', stock_movement_path(sm) %> |
+          <%= link_to 'Edit', edit_stock_movement_path(sm) %> |
+          <%= link_to 'Delete', stock_movement_path(sm), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 <!-- Stock Movements views removed -->
