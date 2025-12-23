@@ -11,7 +11,7 @@ class ProcessingBatchesController < ApplicationController
 
   def create
     @processing_batch = ProcessingBatch.new(processing_batch_params)
-    
+
     if @processing_batch.save
       redirect_to @processing_batch, notice: "Processing batch created successfully."
     else

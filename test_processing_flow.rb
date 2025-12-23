@@ -11,7 +11,7 @@ puts "\n--- Cleaning up previous test data ---"
 begin
   # Clean up processing batches first
   ProcessingBatch.joins("INNER JOIN products ON processing_batches.input_product_id = products.id").where("products.name LIKE 'Test%'").destroy_all rescue nil
-  
+
   # Clean up stock movements (schema-aware)
   if StockMovement.column_names.include?('source_type')
     JutePurchase.joins(:supplier).where("suppliers.name = 'Test Supplier'").find_each do |jp|
@@ -22,13 +22,13 @@ begin
       StockMovement.where(reference_type: 'JutePurchase', reference_id: jp.id).destroy_all
     end
   end
-  
+
   # Clean up purchases
   JutePurchase.joins(:supplier).where("suppliers.name = 'Test Supplier'").destroy_all
-  
+
   # Clean up stock
   JuteStock.joins(:stock_house).where("stock_houses.name = 'Test Warehouse'").destroy_all rescue nil
-  
+
   # Clean up master data
   Product.where("name LIKE 'Test%' OR name = 'Processing Waste'").destroy_all
   StockHouse.where(name: "Test Warehouse").destroy_all
@@ -96,9 +96,9 @@ end
 # Step 5: Verify stock movement was created
 movements = if StockMovement.column_names.include?('source_type')
               StockMovement.where(source_type: 'JutePurchase', source_id: purchase.id)
-            else
+else
               StockMovement.where(reference_type: 'JutePurchase', reference_id: purchase.id)
-            end
+end
 
 puts "✓ Stock movements created: #{movements.count}"
 movements.each do |m|
@@ -122,7 +122,7 @@ begin
     waste_quantity: 20,
     processed_date: Date.today
   )
-  
+
   puts "✓ Processing batch created: #{batch.id}"
   puts "  Input: #{batch.input_quantity} kg"
   puts "  Output: #{batch.output_quantity} kg"
@@ -137,9 +137,9 @@ end
 sleep 0.5
 process_movements = if StockMovement.column_names.include?('source_type')
                       StockMovement.where(source_type: 'ProcessingBatch', source_id: batch.id)
-                    else
+else
                       StockMovement.where(reference_type: 'ProcessingBatch', reference_id: batch.id)
-                    end
+end
 
 puts "\n✓ Processing movements created: #{process_movements.count}"
 process_movements.each do |m|

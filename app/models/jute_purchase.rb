@@ -119,20 +119,20 @@ class JutePurchase < ApplicationRecord
     # Find a representative stock movement created for this purchase
     mv = if StockMovement.column_names.include?("source_type") && StockMovement.column_names.include?("source_id")
            StockMovement.where(source_type: self.class.name, source_id: id).order(:created_at).first
-         elsif StockMovement.column_names.include?("reference_type") && StockMovement.column_names.include?("reference_id")
+    elsif StockMovement.column_names.include?("reference_type") && StockMovement.column_names.include?("reference_id")
            StockMovement.where(reference_type: self.class.name, reference_id: id).order(:created_at).first
-         else
+    else
            nil
-         end
+    end
 
     return false unless mv
 
     # Resolve the jute_stock record referenced by the movement (schema-aware)
     js = if mv.respond_to?(:jute_stock_id) && mv.jute_stock_id.present?
            JuteStock.find_by(id: mv.jute_stock_id)
-         else
+    else
            JuteStock.find_by(product_id: mv.product_id, stock_house_id: mv.respond_to?(:warehouse_id) ? mv.warehouse_id : nil)
-         end
+    end
 
     return false unless js
 
