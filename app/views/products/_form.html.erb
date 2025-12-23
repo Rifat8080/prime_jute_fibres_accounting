@@ -1,0 +1,25 @@
+<%= form_with(model: product) do |f| %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :product_type %><br>
+    <%= f.text_field :product_type %>
+  </div>
+
+  <div>
+    <%= f.label :category %><br>
+    <%= f.text_field :category %>
+  </div>
+
+  <div>
+    <%= f.label :unit %><br>
+    <%= f.text_field :unit %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

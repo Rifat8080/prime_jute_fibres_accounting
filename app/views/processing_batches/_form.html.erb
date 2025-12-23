@@ -1,0 +1,50 @@
+<%= form_with(model: processing_batch) do |f| %>
+  <% if processing_batch && processing_batch.errors.any? %>
+    <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+      <h3 class="font-semibold">Please fix the following errors:</h3>
+      <ul class="mt-2">
+        <% processing_batch.errors.full_messages.each do |msg| %>
+          <li class="text-sm text-red-700"><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= f.label :input_product_id, 'Input product (optional)' %><br>
+    <%= f.collection_select :input_product_id, Product.all.order(:name), :id, :name, include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :input_jute_stock_id, 'Input stock (choose specific jute stock to consume)' %><br>
+    <%= f.collection_select :input_jute_stock_id, JuteStock.all.includes(:product, :stock_house).map { |s| ["#{s.product&.name || 'unknown'} — #{s.stock_house&.name || 'house'} (#{s.quantity_value} kg)", s.id] }, :second, :first, include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :input_quantity %><br>
+    <%= f.number_field :input_quantity, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= f.label :output_product_id, 'Output product' %><br>
+    <%= f.collection_select :output_product_id, Product.all.order(:name), :id, :name, include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :output_quantity %><br>
+    <%= f.number_field :output_quantity, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= f.label :waste_quantity %><br>
+    <%= f.number_field :waste_quantity, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= f.label :processed_date %><br>
+    <%= f.date_field :processed_date %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

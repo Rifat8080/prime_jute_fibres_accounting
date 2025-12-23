@@ -49,9 +49,9 @@
       <% recent.each do |p| %>
         <tr class="hover:bg-gray-50">
           <td class="py-2 px-3"><%= p.purchase_date %></td>
-          <td class="py-2 px-3"><%= p.jute_variety.presence || '—' %></td>
+          <td class="py-2 px-3"><%= p.product&.name.presence || '—' %></td>
           <td class="py-2 px-3"><%= p.quantity_kg.presence || '—' %></td>
-          <td class="py-2 px-3"><%= number_to_currency(p.total_amount || 0) %></td>
+          <td class="py-2 px-3"><%= number_to_currency(p.total_amount || 0, unit: '৳') %></td>
           <td class="py-2 px-3"><%= link_to 'View', p, class: 'text-sm text-blue-600' %></td>
         </tr>
       <% end %>

@@ -6,28 +6,46 @@
   <thead>
     <tr>
       <th>Stock</th>
-      <th>Type</th>
-      <th>Quantity (bales)</th>
-      <th>Date</th>
-      <th>Notes</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stock_movements.each do |sm| %>
-      <tr>
-        <td><%= sm.jute_stock&.jute_quality || '—' %></td>
-        <td><%= sm.movement_type %></td>
-        <td><%= sm.quantity_bales %></td>
-        <td><%= sm.movement_date %></td>
-        <td><%= truncate(sm.notes, length: 50) %></td>
-        <td>
-          <%= link_to 'Show', stock_movement_path(sm) %> |
-          <%= link_to 'Edit', edit_stock_movement_path(sm) %> |
-          <%= link_to 'Delete', stock_movement_path(sm), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<!-- Stock Movements views removed -->
+      <h1>Stock Movements</h1>
+
+      <%= link_to 'New Stock Movement', new_stock_movement_path, class: 'button' %>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Stock</th>
+            <th>Type</th>
+            <th>Quantity (kg)</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stock_movements.each do |sm| %>
+            <% qty = if sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity_bales") && sm["quantity_bales"].present?
+                       sm["quantity_bales"]
+                     elsif sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity") && sm["quantity"].present?
+                       sm["quantity"]
+                     elsif sm.respond_to?(:movement_quantity)
+                       sm.movement_quantity
+                     else
+                       nil
+                     end %>
+            <% mdate = (sm.respond_to?(:has_attribute?) && sm.has_attribute?("movement_date") && sm["movement_date"].present?) ? sm["movement_date"] : sm.created_at %>
+            <% notes = sm.respond_to?(:has_attribute?) && sm.has_attribute?("notes") ? sm["notes"] : (sm.respond_to?(:notes) ? sm.notes : nil) %>
+            <tr>
+              <td><%= sm.jute_stock&.jute_quality || '—' %></td>
+              <td><%= sm.movement_type %></td>
+              <td><%= number_with_precision(sm.movement_quantity, precision: 3) %></td>
+              <td><%= mdate %></td>
+              <td><%= truncate(notes, length: 50) %></td>
+              <td>
+                <%= link_to 'Show', stock_movement_path(sm) %> |
+                <%= link_to 'Edit', edit_stock_movement_path(sm) %> |
+                <%= link_to 'Delete', stock_movement_path(sm), method: :delete, data: { confirm: 'Are you sure?' } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>

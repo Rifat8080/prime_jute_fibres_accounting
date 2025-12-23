@@ -55,7 +55,7 @@
           <td><%= t.transaction_type %></td>
           <td><%= t.transaction_reference %></td>
           <td><%= t.beneficiary %></td>
-          <td><%= number_to_currency(t.amount) %></td>
+          <td><%= number_to_currency(t.amount, unit: '৳') %></td>
           <td><%= link_to 'Show', [@account, t] %></td>
           <td><%= link_to 'Edit', edit_account_transaction_path(@account, t) %></td>
           <td><%= link_to 'Destroy', [@account, t], method: :delete, data: { confirm: 'Are you sure?' } %></td>

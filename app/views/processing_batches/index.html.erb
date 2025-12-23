@@ -1,0 +1,30 @@
+<h1>Processing Batches</h1>
+
+<%= link_to 'New Batch', new_processing_batch_path, class: 'btn' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Input Product</th>
+      <th>Output Product</th>
+      <th>Input Qty</th>
+      <th>Output Qty</th>
+      <th>Processed At</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @processing_batches.each do |pb| %>
+      <tr>
+        <td><%= link_to pb.id, processing_batch_path(pb) %></td>
+        <td><%= pb.input_product&.name %></td>
+        <td><%= pb.output_product&.name %></td>
+        <td><%= pb.input_quantity %></td>
+        <td><%= pb.output_quantity %></td>
+        <td><%= pb.processed_date || pb.created_at.to_date %></td>
+        <td><%= link_to 'Show', processing_batch_path(pb) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

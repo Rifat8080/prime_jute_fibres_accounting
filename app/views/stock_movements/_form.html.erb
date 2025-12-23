@@ -12,7 +12,12 @@
 
   <div class="field">
     <%= f.label :jute_stock_id, "Stock" %><br>
-    <%= f.collection_select :jute_stock_id, JuteStock.all.order(:jute_quality), :id, :jute_quality, prompt: "Select stock" %>
+    <% if defined?(JuteStock) && JuteStock.table_exists? && JuteStock.column_names.include?("jute_quality") %>
+      <% stocks = JuteStock.order(:jute_quality) %>
+    <% else %>
+      <% stocks = JuteStock.order(created_at: :desc) %>
+    <% end %>
+    <%= f.collection_select :jute_stock_id, stocks, :id, :jute_quality, prompt: "Select stock" %>
   </div>
 
   <div class="field">
@@ -21,8 +26,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :quantity_bales %><br>
-    <%= f.number_field :quantity_bales, step: 0.01 %>
+    <%= f.label :quantity, 'Quantity (kg)' %><br>
+    <%= f.number_field :quantity, step: 0.01 %>
   </div>
 
   <div class="field">

@@ -4,7 +4,7 @@
 
 <p>
   <strong>Stock house:</strong>
-  <%= @jute_stock.stock_house.name %>
+  <%= @jute_stock.stock_house&.name %>
 </p>
 
 <p>
@@ -13,8 +13,8 @@
 </p>
 
 <p>
-  <strong>Quantity bales:</strong>
-  <%= @jute_stock.quantity_bales %>
+  <strong>Quantity (kg):</strong>
+  <%= number_with_precision(@jute_stock.quantity_value, precision: 3) %>
 </p>
 
 <p>
@@ -29,7 +29,8 @@
   <%= link_to 'New stock movement for this stock', new_stock_movement_path(jute_stock_id: @jute_stock.id) %>
 </p>
 
-<% recent = @jute_stock.stock_movements.order(movement_date: :desc).limit(10) %>
+<% order_col = (defined?(StockMovement) && StockMovement.table_exists? && StockMovement.column_names.include?('movement_date')) ? 'movement_date' : 'created_at' %>
+<% recent = @jute_stock.stock_movements.order(Arel.sql("#{order_col} DESC")).limit(10).to_a %>
 <% if recent.any? %>
   <table>
     <thead>
@@ -43,11 +44,22 @@
     </thead>
     <tbody>
       <% recent.each do |sm| %>
+        <% qty = if sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity_bales") && sm["quantity_bales"].present?
+                   sm["quantity_bales"]
+                 elsif sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity") && sm["quantity"].present?
+                   sm["quantity"]
+                 elsif sm.respond_to?(:movement_quantity)
+                   sm.movement_quantity
+                 else
+                   nil
+                 end %>
+        <% mdate = (sm.respond_to?(:has_attribute?) && sm.has_attribute?("movement_date") && sm["movement_date"].present?) ? sm["movement_date"] : sm.created_at %>
+        <% notes = sm.respond_to?(:has_attribute?) && sm.has_attribute?("notes") ? sm["notes"] : (sm.respond_to?(:notes) ? sm.notes : nil) %>
         <tr>
           <td><%= sm.movement_type %></td>
-          <td><%= sm.quantity_bales %></td>
-          <td><%= sm.movement_date %></td>
-          <td><%= truncate(sm.notes, length: 50) %></td>
+          <td><%= qty %></td>
+          <td><%= mdate %></td>
+          <td><%= truncate(notes, length: 50) %></td>
           <td><%= link_to 'Show', stock_movement_path(sm) %></td>
         </tr>
       <% end %>
@@ -55,6 +67,37 @@
   </table>
 <% else %>
   <p>No stock movements recorded for this stock.</p>
+<% end %>
+
+<h2>Processing Batches</h2>
+<% pbs = @jute_stock.processing_batches %>
+<% if pbs.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Batch No / ID</th>
+        <th>Processed Date</th>
+        <th>Input Qty</th>
+        <th>Output Qty</th>
+        <th>Waste Qty</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pbs.order(processed_date: :desc).each do |pb| %>
+        <tr>
+          <td><%= pb.batch_no.presence || pb.id %></td>
+          <td><%= pb.processed_date %></td>
+          <td><%= number_with_precision(pb.input_quantity || 0, precision: 3) %></td>
+          <td><%= number_with_precision(pb.output_quantity || 0, precision: 3) %></td>
+          <td><%= number_with_precision(pb.waste_quantity || 0, precision: 3) %></td>
+          <td><%= link_to 'Show', processing_batch_path(pb) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No processing batches related to this stock.</p>
 <% end %>
 
 <%= link_to 'Edit', edit_jute_stock_path(@jute_stock) %> |

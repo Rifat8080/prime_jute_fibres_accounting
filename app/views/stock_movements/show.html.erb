@@ -11,8 +11,8 @@
 </p>
 
 <p>
-  <strong>Quantity (bales):</strong>
-  <%= @stock_movement.quantity_bales %>
+  <strong>Quantity (kg):</strong>
+  <%= number_with_precision(@stock_movement.movement_quantity, precision: 3) %>
 </p>
 
 <p>
@@ -22,7 +22,14 @@
 
 <p>
   <strong>Notes:</strong>
-  <%= simple_format(@stock_movement.notes) %>
+  <% notes = if @stock_movement.respond_to?(:has_attribute?) && @stock_movement.has_attribute?('notes')
+               @stock_movement['notes']
+             elsif @stock_movement.respond_to?(:notes)
+               @stock_movement.notes
+             else
+               nil
+             end %>
+  <%= simple_format(notes) if notes.present? %>
 </p>
 
 <%= link_to 'Edit', edit_stock_movement_path(@stock_movement) %> |

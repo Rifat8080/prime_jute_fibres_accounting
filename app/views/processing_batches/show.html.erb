@@ -1,0 +1,28 @@
+<h1>Processing Batch <%= @processing_batch.id %></h1>
+
+<p>
+  <strong>Input product:</strong>
+  <%= @processing_batch.input_product&.name %>
+</p>
+
+<p>
+  <strong>Input quantity:</strong>
+  <%= @processing_batch.input_quantity %>
+</p>
+
+<p>
+  <strong>Output product:</strong>
+  <%= @processing_batch.output_product&.name %>
+</p>
+
+<p>
+  <strong>Output quantity:</strong>
+  <%= @processing_batch.output_quantity %>
+</p>
+
+<p>
+  <strong>Processed date:</strong>
+  <%= @processing_batch.processed_date || @processing_batch.created_at.to_date %>
+</p>
+
+<%= link_to 'Back', processing_batches_path %>

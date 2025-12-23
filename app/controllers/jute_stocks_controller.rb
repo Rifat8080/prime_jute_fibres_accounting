@@ -53,6 +53,6 @@ class JuteStocksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def jute_stock_params
-      params.require(:jute_stock).permit(:stock_house_id, :jute_quality, :quantity_bales, :last_updated)
+      params.require(:jute_stock).permit(:stock_house_id, :jute_quality, :quantity, :last_updated)
     end
 end

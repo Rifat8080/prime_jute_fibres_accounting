@@ -23,7 +23,7 @@
 
 <p>
   <strong>Amount:</strong>
-  <%= number_to_currency(@transaction.amount) %>
+  <%= number_to_currency(@transaction.amount, unit: '৳') %>
 </p>
 
 <%= link_to 'Edit', edit_account_transaction_path(@account, @transaction) %> |

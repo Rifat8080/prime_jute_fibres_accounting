@@ -2,6 +2,9 @@
 import "@popperjs/core"
 import "flowbite"
 import "./modals"
+import Rails from "@rails/ujs"
+
+Rails.start()
 
 document.addEventListener("turbo:load", () => {
     // Initialize Flowbite components

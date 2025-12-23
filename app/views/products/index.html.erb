@@ -1,0 +1,29 @@
+<h1>Products</h1>
+
+<%= link_to 'New Product', new_product_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Category</th>
+      <th>Unit</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |p| %>
+      <tr>
+        <td><%= link_to p.name, p %></td>
+        <td><%= p.product_type %></td>
+        <td><%= p.category %></td>
+        <td><%= p.unit %></td>
+        <td>
+          <%= link_to 'Edit', edit_product_path(p) %> |
+          <%= button_to 'Delete', p, method: :delete, data: { confirm: 'Are you sure?' }, form: { style: 'display:inline' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

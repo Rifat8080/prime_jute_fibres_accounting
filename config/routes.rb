@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :procurement_costs
   resources :jute_stocks
   resources :stock_movements
+  resources :processing_batches
+  resources :products
 
   resources :salaries
   resources :accounts

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_23_133500) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_24_000500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -144,6 +144,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_133500) do
     t.decimal "quantity_kg", precision: 15, scale: 3
     t.decimal "rate_per_kg", precision: 15, scale: 3
     t.text "notes"
+    t.uuid "stock_house_id"
+    t.uuid "product_id"
+    t.index ["product_id"], name: "index_jute_purchases_on_product_id"
+    t.index ["stock_house_id"], name: "index_jute_purchases_on_stock_house_id"
     t.index ["supplier_id"], name: "index_jute_purchases_on_supplier_id"
   end
 
@@ -198,6 +202,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_133500) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "input_jute_stock_id"
+    t.index ["input_jute_stock_id"], name: "index_processing_batches_on_input_jute_stock_id"
     t.index ["input_product_id"], name: "index_processing_batches_on_input_product_id"
     t.index ["output_product_id"], name: "index_processing_batches_on_output_product_id"
   end
@@ -209,6 +215,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_133500) do
     t.date "effective_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "procurement_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "costable_type", null: false
+    t.uuid "costable_id", null: false
+    t.string "cost_type"
+    t.decimal "amount", precision: 15, scale: 2
+    t.date "cost_date"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["costable_type", "costable_id"], name: "index_procurement_costs_on_costable"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -375,6 +393,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_133500) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bank_reconciliations", "accounts"
   add_foreign_key "journal_entries", "journals"
+  add_foreign_key "jute_purchases", "stock_houses"
   add_foreign_key "jute_purchases", "suppliers"
   add_foreign_key "jute_stocks", "products"
   add_foreign_key "jute_stocks", "stock_houses"

@@ -53,6 +53,6 @@ class JutePurchasesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def jute_purchase_params
-      params.require(:jute_purchase).permit(:supplier_id, :purchase_date, :jute_variety, :quantity_kg, :rate_per_kg, :total_amount, :notes)
+      params.require(:jute_purchase).permit(:supplier_id, :purchase_date, :product_id, :quantity_kg, :rate_per_kg, :total_amount, :notes, :stock_house_id)
     end
 end
