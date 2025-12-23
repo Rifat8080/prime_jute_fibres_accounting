@@ -1,5 +1,5 @@
 class StockMovementsController < ApplicationController
-  before_action :set_stock_movement, only: [:show, :edit, :update, :destroy]
+  before_action :set_stock_movement, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @stock_movements = StockMovement.order(movement_date: :desc)

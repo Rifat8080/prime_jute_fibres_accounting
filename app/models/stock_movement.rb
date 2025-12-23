@@ -10,15 +10,15 @@ class StockMovement < ApplicationRecord
   after_destroy :revert_stock!
 
   def incoming?
-    movement_type == 'incoming'
+    movement_type == "incoming"
   end
 
   def outgoing?
-    movement_type == 'outgoing'
+    movement_type == "outgoing"
   end
 
   def transfer?
-    movement_type == 'transfer'
+    movement_type == "transfer"
   end
 
   private
