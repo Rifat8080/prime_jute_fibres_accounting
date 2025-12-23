@@ -1,12 +1,16 @@
 <div class="w-full">
   <div class="flex justify-between items-center mb-4">
     <h1 class="font-bold text-4xl">Users</h1>
+    <div>
+      <%= link_to 'New User', new_user_path, class: "bg-blue-600 text-white px-3 py-2 rounded shadow" %>
+    </div>
   </div>
 
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white">
       <thead class="bg-gray-800 text-white">
         <tr>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">#</th>
           <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
           <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
           <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Phone</th>
@@ -16,17 +20,37 @@
         </tr>
       </thead>
       <tbody class="text-gray-700">
-        <% @users.each do |user| %>
-          <tr>
-            <td class="text-left py-3 px-4"><%= user.name %></td>
-            <td class="text-left py-3 px-4"><%= user.email %></td>
-            <td class="text-left py-3 px-4"><%= user.phone %></td>
-            <td class="text-left py-3 px-4"><%= user.designation %></td>
-            <td class="text-left py-3 px-4"><%= user.role %></td>
+        <% @users.each_with_index do |user, idx| %>
+          <tr class="hover:bg-gray-50">
+            <td class="text-left py-3 px-4"><%= idx + 1 %></td>
             <td class="text-left py-3 px-4">
-              <%= link_to 'Show', user, class: "text-blue-500 hover:text-blue-700" %>
-              <%= link_to 'Edit', edit_user_path(user), class: "text-blue-500 hover:text-blue-700 ml-2" %>
-              <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-500 hover:text-red-700 ml-2" %>
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-semibold text-gray-700">
+                  <%= user.name.to_s.split.map(&:first).join.upcase.first(2) rescue 'U' %>
+                </div>
+                <div>
+                  <%= link_to user.name.presence || user.email, user_path(user), class: "font-medium text-gray-900" %>
+                  <div class="text-xs text-gray-500"><%= user.email %></div>
+                </div>
+              </div>
+            </td>
+            <td class="text-left py-3 px-4"><%= user.email %></td>
+            <td class="text-left py-3 px-4"><%= user.phone.presence || '—' %></td>
+            <td class="text-left py-3 px-4"><%= user.designation.presence || '—' %></td>
+            <td class="text-left py-3 px-4">
+              <% case user.role.to_s.downcase %>
+              <% when 'admin' %>
+                <span class="px-2 py-1 rounded bg-red-100 text-red-700 text-xs">Admin</span>
+              <% when 'manager' %>
+                <span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs">Manager</span>
+              <% else %>
+                <span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs"><%= user.role.presence || 'User' %></span>
+              <% end %>
+            </td>
+            <td class="text-left py-3 px-4">
+              <%= link_to 'Show', user, class: "inline-block text-sm bg-white border px-2 py-1 rounded hover:shadow" %>
+              <%= link_to 'Edit', edit_user_path(user), class: "inline-block text-sm bg-blue-600 text-white px-2 py-1 rounded ml-2" %>
+              <%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, class: "inline-block text-sm bg-red-600 text-white px-2 py-1 rounded ml-2" %>
             </td>
           </tr>
         <% end %>
