@@ -27,5 +27,40 @@
   <%= @supplier.supplier_type %>
 </p>
 
-<%= link_to 'Edit', edit_supplier_path(@supplier) %> |
-<%= link_to 'Back', suppliers_path %>
+<div class="mt-6">
+  <%= link_to 'Edit', edit_supplier_path(@supplier), class: 'bg-blue-600 text-white px-3 py-2 rounded' %>
+  <%= link_to 'Back', suppliers_path, class: 'ml-2 text-sm text-gray-600' %>
+</div>
+
+<h2 class="mt-8 text-xl font-semibold">Recent purchases</h2>
+<% recent = @supplier.jute_purchases.order(purchase_date: :desc).limit(8) %>
+<% if recent.any? %>
+  <table class="min-w-full mt-3 bg-white">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="py-2 px-3 text-left">Date</th>
+        <th class="py-2 px-3 text-left">Variety</th>
+        <th class="py-2 px-3 text-left">Quantity (kg)</th>
+        <th class="py-2 px-3 text-left">Total</th>
+        <th class="py-2 px-3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% recent.each do |p| %>
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 px-3"><%= p.purchase_date %></td>
+          <td class="py-2 px-3"><%= p.jute_variety.presence || '—' %></td>
+          <td class="py-2 px-3"><%= p.quantity_kg.presence || '—' %></td>
+          <td class="py-2 px-3"><%= number_to_currency(p.total_amount || 0) %></td>
+          <td class="py-2 px-3"><%= link_to 'View', p, class: 'text-sm text-blue-600' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-sm text-gray-500 mt-2">No purchases recorded for this supplier.</p>
+<% end %>
+
+<p class="mt-3">
+  <%= link_to 'New purchase for this supplier', new_jute_purchase_path(supplier_id: @supplier.id), class: 'text-sm text-blue-600' %>
+</p>

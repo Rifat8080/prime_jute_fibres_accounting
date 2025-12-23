@@ -1,28 +1,30 @@
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+  <div class="mb-4">
+    <%= form.label :name, class: 'block text-sm font-medium text-gray-700' %>
+    <%= form.text_field :name, class: 'mt-1 block w-full border rounded py-2 px-3' %>
   </div>
 
-  <div class="field">
-    <%= form.label :contact_person %>
-    <%= form.text_field :contact_person %>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= form.label :contact_person, class: 'block text-sm font-medium text-gray-700' %>
+      <%= form.text_field :contact_person, class: 'mt-1 block w-full border rounded py-2 px-3' %>
+    </div>
+    <div>
+      <%= form.label :phone, class: 'block text-sm font-medium text-gray-700' %>
+      <%= form.text_field :phone, class: 'mt-1 block w-full border rounded py-2 px-3' %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :phone %>
-    <%= form.text_field :phone %>
+  <div class="mb-4 mt-4">
+    <%= form.label :address, class: 'block text-sm font-medium text-gray-700' %>
+    <%= form.text_area :address, class: 'mt-1 block w-full border rounded py-2 px-3', rows: 3 %>
   </div>
 
-  <div class="field">
-    <%= form.label :address %>
-    <%= form.text_area :address %>
+  <div class="mb-4">
+    <%= form.label :supplier_type, class: 'block text-sm font-medium text-gray-700' %>
+    <%= form.select :supplier_type, [['Local','local'], ['International','international']], { prompt: 'Select type' }, class: 'mt-1 block w-full border rounded py-2 px-3' %>
   </div>
 
-  <div class="field">
-    <%= form.label :supplier_type %>
-    <%= form.text_field :supplier_type %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="flex items-center gap-3">
+    <%= form.submit class: 'bg-blue-600 text-white px-4 py-2 rounded' %>
+    <%= link_to 'Back', suppliers_path, class: 'text-sm text-gray-600' %>
   </div>

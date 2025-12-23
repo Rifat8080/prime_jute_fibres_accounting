@@ -1,32 +1,37 @@
-<h1>Suppliers</h1>
+<div class="w-full">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-3xl font-bold">Suppliers</h1>
+    <%= link_to 'New Supplier', new_supplier_path, class: 'bg-blue-600 text-white px-3 py-2 rounded shadow' %>
+  </div>
 
-<div id="suppliers">
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Contact person</th>
-        <th>Phone</th>
-        <th>Address</th>
-        <th>Supplier type</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @suppliers.each do |supplier| %>
+  <div class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full">
+      <thead class="bg-gray-800 text-white">
         <tr>
-          <td><%= supplier.name %></td>
-          <td><%= supplier.contact_person %></td>
-          <td><%= supplier.phone %></td>
-          <td><%= supplier.address %></td>
-          <td><%= supplier.supplier_type %></td>
-          <td><%= link_to 'Show', supplier %></td>
-          <td><%= link_to 'Edit', edit_supplier_path(supplier) %></td>
-          <td><%= link_to 'Destroy', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Contact</th>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Phone</th>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Address</th>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Type</th>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="text-gray-700">
+        <% @suppliers.each do |supplier| %>
+          <tr class="hover:bg-gray-50">
+            <td class="py-3 px-4"><%= link_to supplier.name, supplier_path(supplier), class: 'font-medium text-gray-900' %></td>
+            <td class="py-3 px-4"><%= supplier.contact_person.presence || '—' %></td>
+            <td class="py-3 px-4"><%= supplier.phone.presence || '—' %></td>
+            <td class="py-3 px-4"><%= truncate(supplier.address.to_s, length: 40) %></td>
+            <td class="py-3 px-4"><%= supplier.supplier_type.presence || '—' %></td>
+            <td class="py-3 px-4">
+              <%= link_to 'Show', supplier, class: 'text-sm bg-white border px-2 py-1 rounded' %>
+              <%= link_to 'Edit', edit_supplier_path(supplier), class: 'text-sm bg-blue-600 text-white px-2 py-1 rounded ml-2' %>
+              <%= link_to 'Delete', supplier, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-sm bg-red-600 text-white px-2 py-1 rounded ml-2' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to 'New supplier', new_supplier_path %>
