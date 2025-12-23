@@ -26,7 +26,8 @@ class JutePurchasesController < ApplicationController
     if @jute_purchase.save
       redirect_to @jute_purchase, notice: "Jute purchase was successfully created."
     else
-      render :new
+      flash.now[:alert] = @jute_purchase.errors.full_messages.join("; ")
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +36,8 @@ class JutePurchasesController < ApplicationController
     if @jute_purchase.update(jute_purchase_params)
       redirect_to @jute_purchase, notice: "Jute purchase was successfully updated."
     else
-      render :edit
+      flash.now[:alert] = @jute_purchase.errors.full_messages.join("; ")
+      render :edit, status: :unprocessable_entity
     end
   end
 

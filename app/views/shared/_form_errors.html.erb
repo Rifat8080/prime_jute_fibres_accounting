@@ -1,0 +1,11 @@
+<%# Shared form error renderer - pass `object:` when rendering %>
+<% if local_assigns[:object] && object.respond_to?(:errors) && object.errors.any? %>
+  <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+    <h3 class="font-semibold">Please fix the following errors:</h3>
+    <ul class="mt-2">
+      <% object.errors.full_messages.each do |msg| %>
+        <li class="text-sm text-red-700"><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

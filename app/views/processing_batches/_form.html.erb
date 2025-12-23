@@ -1,14 +1,5 @@
 <%= form_with(model: processing_batch) do |f| %>
-  <% if processing_batch && processing_batch.errors.any? %>
-    <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded">
-      <h3 class="font-semibold">Please fix the following errors:</h3>
-      <ul class="mt-2">
-        <% processing_batch.errors.full_messages.each do |msg| %>
-          <li class="text-sm text-red-700"><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'shared/form_errors', object: processing_batch %>
   <div>
     <%= f.label :input_product_id, 'Input product (optional)' %><br>
     <%= f.collection_select :input_product_id, Product.all.order(:name), :id, :name, include_blank: true %>

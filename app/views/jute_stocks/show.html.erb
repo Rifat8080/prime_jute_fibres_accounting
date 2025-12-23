@@ -1,104 +1,120 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Jute Stock</h1>
+<div class="space-y-4">
+  <div class="bg-white rounded shadow p-4">
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold">Jute Stock</h1>
+        <p class="text-sm text-gray-500">Stock details and recent activity</p>
+      </div>
+      <div class="text-right">
+        <%= link_to 'Edit', edit_jute_stock_path(@jute_stock), class: 'px-3 py-2 bg-yellow-500 text-white rounded' %>
+        <%= link_to 'Back', jute_stocks_path, class: 'ml-2 px-3 py-2 bg-gray-200 rounded' %>
+      </div>
+    </div>
 
-<p>
-  <strong>Stock house:</strong>
-  <%= @jute_stock.stock_house&.name %>
-</p>
+    <div class="grid grid-cols-2 gap-4 mt-4">
+      <div>
+        <p class="text-xs text-gray-500">Stock house</p>
+        <p class="text-lg"><%= @jute_stock.stock_house&.name %></p>
 
-<p>
-  <strong>Jute quality:</strong>
-  <%= @jute_stock.jute_quality %>
-</p>
+        <p class="text-xs text-gray-500 mt-3">Product</p>
+        <p class="text-lg"><%= @jute_stock.product&.name.presence || @jute_stock.jute_quality %></p>
+      </div>
 
-<p>
-  <strong>Quantity (kg):</strong>
-  <%= number_with_precision(@jute_stock.quantity_value, precision: 3) %>
-</p>
+      <div>
+        <p class="text-xs text-gray-500">Quantity (kg)</p>
+        <p class="text-2xl font-medium"><%= number_with_precision(@jute_stock.quantity_value, precision: 3) %></p>
 
-<p>
-  <strong>Last updated:</strong>
-  <%= @jute_stock.last_updated %>
-</p>
+        <p class="text-xs text-gray-500 mt-3">Last updated</p>
+        <p class="text-sm"><%= @jute_stock.last_updated %></p>
+      </div>
+    </div>
+  </div>
 
-<h2>Stock Movements</h2>
+  <div class="bg-white rounded shadow p-4">
+    <h2 class="text-lg font-semibold mb-2">Recent Stock Movements</h2>
+    <p class="text-sm text-gray-500 mb-3">
+      <%= link_to 'View all stock movements for this stock', stock_movements_path(jute_stock_id: @jute_stock.id), class: 'text-blue-600' %>
+      &nbsp;|&nbsp;
+      <%= link_to 'New stock movement for this stock', new_stock_movement_path(jute_stock_id: @jute_stock.id), class: 'text-blue-600' %>
+    </p>
 
-<p>
-  <%= link_to 'View all stock movements for this stock', stock_movements_path(jute_stock_id: @jute_stock.id) %> |
-  <%= link_to 'New stock movement for this stock', new_stock_movement_path(jute_stock_id: @jute_stock.id) %>
-</p>
+    <% order_col = (defined?(StockMovement) && StockMovement.table_exists? && StockMovement.column_names.include?('movement_date')) ? 'movement_date' : 'created_at' %>
+    <% recent = @jute_stock.stock_movements.order(Arel.sql("#{order_col} DESC")).limit(10).to_a %>
+    <% if recent.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Type</th>
+              <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Notes</th>
+              <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% recent.each do |sm| %>
+              <% qty = if sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity_bales") && sm["quantity_bales"].present?
+                         sm["quantity_bales"]
+                       elsif sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity") && sm["quantity"].present?
+                         sm["quantity"]
+                       elsif sm.respond_to?(:movement_quantity)
+                         sm.movement_quantity
+                       else
+                         nil
+                       end %>
+              <% mdate = (sm.respond_to?(:has_attribute?) && sm.has_attribute?("movement_date") && sm["movement_date"].present?) ? sm["movement_date"] : sm.created_at %>
+              <% notes = sm.respond_to?(:has_attribute?) && sm.has_attribute?("notes") ? sm["notes"] : (sm.respond_to?(:notes) ? sm.notes : nil) %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 text-sm"><%= sm.movement_type %></td>
+                <td class="px-4 py-2 text-sm text-right"><%= qty %></td>
+                <td class="px-4 py-2 text-sm"><%= mdate %></td>
+                <td class="px-4 py-2 text-sm"><%= truncate(notes, length: 50) %></td>
+                <td class="px-4 py-2 text-sm"><%= link_to 'Show', stock_movement_path(sm), class: 'text-blue-600' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">No stock movements recorded for this stock.</p>
+    <% end %>
+  </div>
 
-<% order_col = (defined?(StockMovement) && StockMovement.table_exists? && StockMovement.column_names.include?('movement_date')) ? 'movement_date' : 'created_at' %>
-<% recent = @jute_stock.stock_movements.order(Arel.sql("#{order_col} DESC")).limit(10).to_a %>
-<% if recent.any? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Quantity</th>
-        <th>Date</th>
-        <th>Notes</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% recent.each do |sm| %>
-        <% qty = if sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity_bales") && sm["quantity_bales"].present?
-                   sm["quantity_bales"]
-                 elsif sm.respond_to?(:has_attribute?) && sm.has_attribute?("quantity") && sm["quantity"].present?
-                   sm["quantity"]
-                 elsif sm.respond_to?(:movement_quantity)
-                   sm.movement_quantity
-                 else
-                   nil
-                 end %>
-        <% mdate = (sm.respond_to?(:has_attribute?) && sm.has_attribute?("movement_date") && sm["movement_date"].present?) ? sm["movement_date"] : sm.created_at %>
-        <% notes = sm.respond_to?(:has_attribute?) && sm.has_attribute?("notes") ? sm["notes"] : (sm.respond_to?(:notes) ? sm.notes : nil) %>
-        <tr>
-          <td><%= sm.movement_type %></td>
-          <td><%= qty %></td>
-          <td><%= mdate %></td>
-          <td><%= truncate(notes, length: 50) %></td>
-          <td><%= link_to 'Show', stock_movement_path(sm) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No stock movements recorded for this stock.</p>
-<% end %>
-
-<h2>Processing Batches</h2>
-<% pbs = @jute_stock.processing_batches %>
-<% if pbs.any? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Batch No / ID</th>
-        <th>Processed Date</th>
-        <th>Input Qty</th>
-        <th>Output Qty</th>
-        <th>Waste Qty</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% pbs.order(processed_date: :desc).each do |pb| %>
-        <tr>
-          <td><%= pb.batch_no.presence || pb.id %></td>
-          <td><%= pb.processed_date %></td>
-          <td><%= number_with_precision(pb.input_quantity || 0, precision: 3) %></td>
-          <td><%= number_with_precision(pb.output_quantity || 0, precision: 3) %></td>
-          <td><%= number_with_precision(pb.waste_quantity || 0, precision: 3) %></td>
-          <td><%= link_to 'Show', processing_batch_path(pb) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No processing batches related to this stock.</p>
-<% end %>
-
-<%= link_to 'Edit', edit_jute_stock_path(@jute_stock) %> |
-<%= link_to 'Back', jute_stocks_path %>
+  <div class="bg-white rounded shadow p-4">
+    <h2 class="text-lg font-semibold mb-2">Processing Batches</h2>
+    <% pbs = @jute_stock.processing_batches %>
+    <% if pbs.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+                  <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Batch No / ID</th>
+                  <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Processed Date</th>
+                  <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Input Qty</th>
+                  <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Output Qty</th>
+                  <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Waste Qty</th>
+                  <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% pbs.order(processed_date: :desc).each do |pb| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 text-sm"><%= pb.batch_no.presence || pb.id %></td>
+                <td class="px-4 py-2 text-sm"><%= pb.processed_date %></td>
+                <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(pb.input_quantity || 0, precision: 3) %></td>
+                <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(pb.output_quantity || 0, precision: 3) %></td>
+                <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(pb.waste_quantity || 0, precision: 3) %></td>
+                <td class="px-4 py-2 text-sm"><%= link_to 'Show', processing_batch_path(pb), class: 'text-blue-600' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">No processing batches related to this stock.</p>
+    <% end %>
+  </div>
+</div>

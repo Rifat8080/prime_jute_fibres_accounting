@@ -5,36 +5,36 @@ class JuteStock < ApplicationRecord
   # direct `jute_stock_id` FK on `stock_movements`; others link by
   # `product_id` + `warehouse_id` (stock_house). Create a fallback
   # association name and expose a schema-aware `stock_movements` method.
-  if defined?(StockMovement) && StockMovement.table_exists? && StockMovement.column_names.include?('jute_stock_id')
-    has_many :stock_movements_assoc, class_name: 'StockMovement', foreign_key: 'jute_stock_id', dependent: :nullify
+  if defined?(StockMovement) && StockMovement.table_exists? && StockMovement.column_names.include?("jute_stock_id")
+    has_many :stock_movements_assoc, class_name: "StockMovement", foreign_key: "jute_stock_id", dependent: :nullify
   else
     # no direct association defined — we'll query dynamically in the method below
   end
 
-  validates :jute_quality, presence: true, if: -> { has_attribute?('jute_quality') }
+  validates :jute_quality, presence: true, if: -> { has_attribute?("jute_quality") }
   validate :quantity_present_and_number
 
   def quantity_field
-    if has_attribute?('quantity_bales')
-      'quantity_bales'
+    if has_attribute?("quantity_bales")
+      "quantity_bales"
     else
-      'quantity'
+      "quantity"
     end
   end
 
   # Safe accessor for views — some schemas don't have `jute_quality`.
   def jute_quality
-    has_attribute?('jute_quality') ? self[:jute_quality] : nil
+    has_attribute?("jute_quality") ? self[:jute_quality] : nil
   end
 
   # Provide a `quantity_bales` method for views; fall back to whichever
   # quantity column exists.
   def quantity_bales
-    if has_attribute?('quantity_bales')
+    if has_attribute?("quantity_bales")
       self[:quantity_bales]
     else
       # fall back to `quantity` column if that exists
-      has_attribute?('quantity') ? self[:quantity] : nil
+      has_attribute?("quantity") ? self[:quantity] : nil
     end
   end
 
@@ -65,15 +65,15 @@ class JuteStock < ApplicationRecord
     ids = []
     if defined?(StockMovement) && StockMovement.table_exists?
       sm = stock_movements
-      if StockMovement.column_names.include?('source_type') && StockMovement.column_names.include?('source_id')
-        ids += sm.where(source_type: 'ProcessingBatch').pluck(:source_id) rescue []
+      if StockMovement.column_names.include?("source_type") && StockMovement.column_names.include?("source_id")
+        ids += sm.where(source_type: "ProcessingBatch").pluck(:source_id) rescue []
       end
-      if StockMovement.column_names.include?('reference_type') && StockMovement.column_names.include?('reference_id')
-        ids += sm.where(reference_type: 'ProcessingBatch').pluck(:reference_id) rescue []
+      if StockMovement.column_names.include?("reference_type") && StockMovement.column_names.include?("reference_id")
+        ids += sm.where(reference_type: "ProcessingBatch").pluck(:reference_id) rescue []
       end
     end
 
-    if ProcessingBatch.column_names.include?('input_jute_stock_id')
+    if ProcessingBatch.column_names.include?("input_jute_stock_id")
       ids += ProcessingBatch.where(input_jute_stock_id: id).pluck(:id) rescue []
     end
 
@@ -106,11 +106,11 @@ class JuteStock < ApplicationRecord
   def quantity_present_and_number
     val = self[quantity_field]
     if val.nil?
-      errors.add(:base, 'quantity is required')
+      errors.add(:base, "quantity is required")
     elsif !val.is_a?(Numeric) && !(val.is_a?(BigDecimal))
-      errors.add(:base, 'quantity must be a number')
+      errors.add(:base, "quantity must be a number")
     elsif val.to_d < 0
-      errors.add(:base, 'quantity cannot be negative')
+      errors.add(:base, "quantity cannot be negative")
     end
   end
 end

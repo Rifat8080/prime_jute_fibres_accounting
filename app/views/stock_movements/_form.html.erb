@@ -1,14 +1,5 @@
 <%= form_with(model: stock_movement, local: true) do |f| %>
-  <% if stock_movement.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(stock_movement.errors.count, "error") %> prohibited this record from being saved:</h2>
-      <ul>
-      <% stock_movement.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'shared/form_errors', object: stock_movement %>
 
   <div class="field">
     <%= f.label :jute_stock_id, "Stock" %><br>

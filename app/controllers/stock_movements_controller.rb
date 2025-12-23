@@ -3,7 +3,7 @@ class StockMovementsController < ApplicationController
 
   def index
     conn = ActiveRecord::Base.connection
-    order_col = (conn.respond_to?(:column_exists?) && conn.column_exists?(:stock_movements, :movement_date)) ? 'movement_date' : 'created_at'
+    order_col = (conn.respond_to?(:column_exists?) && conn.column_exists?(:stock_movements, :movement_date)) ? "movement_date" : "created_at"
     @stock_movements = StockMovement.order(Arel.sql("#{order_col} DESC"))
   end
 
@@ -35,6 +35,7 @@ class StockMovementsController < ApplicationController
     if @stock_movement.save
       redirect_to stock_movements_path, notice: "Stock movement was successfully created."
     else
+      flash.now[:alert] = @stock_movement.errors.full_messages.join("; ")
       render :new
     end
   end
@@ -43,6 +44,7 @@ class StockMovementsController < ApplicationController
     if @stock_movement.update(stock_movement_params)
       redirect_to stock_movements_path, notice: "Stock movement was successfully updated."
     else
+      flash.now[:alert] = @stock_movement.errors.full_messages.join("; ")
       render :edit
     end
   end

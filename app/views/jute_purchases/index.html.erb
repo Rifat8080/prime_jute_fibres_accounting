@@ -6,22 +6,24 @@
 <div class="overflow-x-auto bg-white rounded shadow">
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
-      <tr>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Supplier</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Purchase date</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Product</th>
-        <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity (kg)</th>
-        <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Rate</th>
-        <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Total</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Notes</th>
-        <th class="px-4 py-2"></th>
-      </tr>
+        <tr>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Supplier</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Purchase date</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Stock house</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Product</th>
+          <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity (kg)</th>
+          <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Rate</th>
+          <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Total</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Notes</th>
+          <th class="px-4 py-2"></th>
+        </tr>
     </thead>
     <tbody class="divide-y divide-gray-100">
       <% @jute_purchases.each do |jute_purchase| %>
         <tr class="hover:bg-gray-50">
           <td class="px-4 py-2 text-sm"><%= jute_purchase.supplier&.name %></td>
           <td class="px-4 py-2 text-sm"><%= jute_purchase.purchase_date %></td>
+          <td class="px-4 py-2 text-sm"><%= jute_purchase.stock_house&.name || '—' %></td>
           <td class="px-4 py-2 text-sm"><%= jute_purchase.product&.name || '—' %></td>
           <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(jute_purchase.quantity_kg || 0, precision: 3) %></td>
           <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(jute_purchase.rate_per_kg || 0, precision: 2) %></td>

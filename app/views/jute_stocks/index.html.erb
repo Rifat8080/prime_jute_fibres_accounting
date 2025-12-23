@@ -1,30 +1,33 @@
-<h1>Jute Stocks</h1>
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-semibold">Jute Stocks</h1>
+  <%= link_to 'New jute stock', new_jute_stock_path, class: 'px-3 py-2 bg-green-600 text-white rounded' %>
+</div>
 
-<div id="jute_stocks">
-  <table>
-    <thead>
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
       <tr>
-        <th>Stock house</th>
-        <th>Jute quality</th>
-        <th>Quantity (kg)</th>
-        <th>Last updated</th>
-        <th colspan="3"></th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Stock house</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Jute quality</th>
+        <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity (kg)</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Last updated</th>
+        <th class="px-4 py-2"></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="divide-y divide-gray-100">
       <% @jute_stocks.each do |jute_stock| %>
-        <tr>
-          <td><%= jute_stock.stock_house.name %></td>
-          <td><%= jute_stock.jute_quality %></td>
-          <td><%= number_with_precision(jute_stock.quantity_value, precision: 3) %></td>
-          <td><%= jute_stock.last_updated %></td>
-          <td><%= link_to 'Show', jute_stock %></td>
-          <td><%= link_to 'Edit', edit_jute_stock_path(jute_stock) %></td>
-          <td><%= link_to 'Destroy', jute_stock, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-sm"><%= jute_stock.stock_house&.name %></td>
+          <td class="px-4 py-2 text-sm"><%= jute_stock.product&.name.presence || jute_stock.jute_quality %></td>
+          <td class="px-4 py-2 text-sm text-right"><%= number_with_precision(jute_stock.quantity_value, precision: 3) %></td>
+          <td class="px-4 py-2 text-sm"><%= jute_stock.last_updated %></td>
+          <td class="px-4 py-2 text-sm">
+            <%= link_to 'Show', jute_stock, class: 'text-blue-600' %>
+            <%= link_to 'Edit', edit_jute_stock_path(jute_stock), class: 'ml-2 text-gray-600' %>
+            <%= button_to 'Destroy', jute_stock, method: :delete, data: { confirm: 'Are you sure?' }, form: { style: 'display:inline' }, class: 'ml-2 text-red-600' %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
-
-<%= link_to 'New jute stock', new_jute_stock_path %>

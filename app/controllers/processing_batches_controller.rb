@@ -11,11 +11,18 @@ class ProcessingBatchesController < ApplicationController
 
   def create
     @processing_batch = ProcessingBatch.new(processing_batch_params)
+    
     if @processing_batch.save
-      redirect_to @processing_batch, notice: 'Processing batch created.'
+      redirect_to @processing_batch, notice: "Processing batch created successfully."
     else
+      flash.now[:alert] = @processing_batch.errors.full_messages.join("; ")
       render :new, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordInvalid => e
+    @processing_batch ||= ProcessingBatch.new(processing_batch_params)
+    @processing_batch.errors.add(:base, e.message)
+    flash.now[:alert] = e.message
+    render :new, status: :unprocessable_entity
   end
 
   def show

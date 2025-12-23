@@ -17,8 +17,13 @@
   </div>
 
   <div class="field">
-    <%= form.label :jute_quality %>
-    <%= form.text_field :jute_quality %>
+    <% if jute_stock.respond_to?(:has_attribute?) && jute_stock.has_attribute?("product_id") %>
+      <%= form.label :product_id, 'Product' %>
+      <%= form.collection_select :product_id, Product.all.order(:name), :id, :name, include_blank: true %>
+    <% else %>
+      <%= form.label :jute_quality %>
+      <%= form.text_field :jute_quality %>
+    <% end %>
   </div>
 
   <div class="field">
