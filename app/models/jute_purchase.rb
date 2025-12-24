@@ -81,7 +81,17 @@ class JutePurchase < ApplicationRecord
       movement_attrs[:product_id] = jute_stock.product_id if jute_stock.respond_to?(:product_id)
     end
 
+    # Ensure product_id is set on the stock movement when possible
+    if StockMovement.table_exists? && StockMovement.column_names.include?("product_id") && movement_attrs[:product_id].blank?
+      movement_attrs[:product_id] = product_id
+    end
+
     movement_attrs[:movement_date] = purchase_date || Date.today if StockMovement.column_names.include?("movement_date")
+
+    # Attach purchase total amount to the stock movement when the column exists
+    if StockMovement.table_exists? && StockMovement.column_names.include?("total_amount")
+      movement_attrs[:total_amount] = total_amount
+    end
 
     StockMovement.create!(movement_attrs)
   end

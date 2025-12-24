@@ -15,7 +15,9 @@
           <tr>
             <th>Stock</th>
             <th>Type</th>
+            <th>Product</th>
             <th>Quantity (kg)</th>
+            <th>Total</th>
             <th>Date</th>
             <th>Notes</th>
             <th></th>
@@ -37,7 +39,18 @@
             <tr>
               <td><%= sm.jute_stock&.jute_quality || '—' %></td>
               <td><%= sm.movement_type %></td>
+              <td>
+                <% prod_name = sm.jute_stock&.product&.name || (defined?(Product) ? Product.find_by(id: sm.product_id)&.name : nil) %>
+                <%= prod_name.presence || '—' %>
+              </td>
               <td><%= number_with_precision(sm.movement_quantity, precision: 3) %></td>
+              <td>
+                <% if StockMovement.column_names.include?("total_amount") && sm.respond_to?(:total_amount) && sm.total_amount.present? %>
+                  <%= number_to_currency(sm.total_amount, unit: '৳') %>
+                <% else %>
+                  —
+                <% end %>
+              </td>
               <td><%= mdate %></td>
               <td><%= truncate(notes, length: 50) %></td>
               <td>

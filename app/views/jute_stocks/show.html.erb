@@ -48,7 +48,9 @@
           <thead class="bg-gray-50">
             <tr>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Type</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Product</th>
               <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity</th>
+              <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Total Amount</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Notes</th>
               <th class="px-4 py-2"></th>
@@ -69,7 +71,18 @@
               <% notes = sm.respond_to?(:has_attribute?) && sm.has_attribute?("notes") ? sm["notes"] : (sm.respond_to?(:notes) ? sm.notes : nil) %>
               <tr class="hover:bg-gray-50">
                 <td class="px-4 py-2 text-sm"><%= sm.movement_type %></td>
+                <td class="px-4 py-2 text-sm">
+                  <% prod_name = sm.jute_stock&.product&.name || (defined?(Product) ? Product.find_by(id: sm.product_id)&.name : nil) %>
+                  <%= prod_name.presence || '—' %>
+                </td>
                 <td class="px-4 py-2 text-sm text-right"><%= qty %></td>
+                <td class="px-4 py-2 text-sm text-right">
+                  <% if StockMovement.column_names.include?("total_amount") && sm.respond_to?(:total_amount) && sm.total_amount.present? %>
+                    <%= number_to_currency(sm.total_amount, unit: '৳') %>
+                  <% else %>
+                    —
+                  <% end %>
+                </td>
                 <td class="px-4 py-2 text-sm"><%= mdate %></td>
                 <td class="px-4 py-2 text-sm"><%= truncate(notes, length: 50) %></td>
                 <td class="px-4 py-2 text-sm"><%= link_to 'Show', stock_movement_path(sm), class: 'text-blue-600' %></td>

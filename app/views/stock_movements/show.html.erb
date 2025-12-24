@@ -11,8 +11,23 @@
 </p>
 
 <p>
+  <strong>Product:</strong>
+  <% prod_name = @stock_movement.jute_stock&.product&.name || (defined?(Product) ? Product.find_by(id: @stock_movement.product_id)&.name : nil) %>
+  <%= prod_name.presence || '—' %>
+</p>
+
+<p>
   <strong>Quantity (kg):</strong>
   <%= number_with_precision(@stock_movement.movement_quantity, precision: 3) %>
+</p>
+
+<p>
+  <strong>Total Amount:</strong>
+  <% if StockMovement.column_names.include?("total_amount") && @stock_movement.respond_to?(:total_amount) && @stock_movement.total_amount.present? %>
+    <%= number_to_currency(@stock_movement.total_amount, unit: '৳') %>
+  <% else %>
+    —
+  <% end %>
 </p>
 
 <p>

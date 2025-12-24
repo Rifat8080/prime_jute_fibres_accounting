@@ -26,6 +26,13 @@
     <%= f.date_field :movement_date %>
   </div>
 
+  <% if StockMovement.column_names.include?("total_amount") %>
+    <div class="field">
+      <%= f.label :total_amount, 'Total Amount (৳)' %><br>
+      <%= f.number_field :total_amount, step: 0.01 %>
+    </div>
+  <% end %>
+
   <div class="field">
     <%= f.label :notes %><br>
     <%= f.text_area :notes, rows: 3 %>
