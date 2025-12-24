@@ -80,6 +80,39 @@ class JuteStock < ApplicationRecord
     ProcessingBatch.where(id: ids.uniq)
   end
 
+  # Return JuteStock records that have at least one StockMovement originating
+  # from a `JutePurchase` (schema-aware: supports either direct `jute_stock_id`
+  # on StockMovement or product/warehouse mapping fallback).
+  def self.for_purchases
+    return none unless defined?(StockMovement) && StockMovement.table_exists?
+
+    ids = []
+
+    if StockMovement.column_names.include?("jute_stock_id")
+      if StockMovement.column_names.include?("source_type")
+        ids += StockMovement.where(source_type: "JutePurchase").pluck(:jute_stock_id)
+      end
+      if StockMovement.column_names.include?("reference_type")
+        ids += StockMovement.where(reference_type: "JutePurchase").pluck(:jute_stock_id)
+      end
+    else
+      if StockMovement.column_names.include?("source_type")
+        StockMovement.where(source_type: "JutePurchase").find_each do |m|
+          js = JuteStock.find_by(product_id: m.product_id, stock_house_id: m.warehouse_id)
+          ids << js.id if js
+        end
+      end
+      if StockMovement.column_names.include?("reference_type")
+        StockMovement.where(reference_type: "JutePurchase").find_each do |m|
+          js = JuteStock.find_by(product_id: m.product_id, stock_house_id: m.warehouse_id)
+          ids << js.id if js
+        end
+      end
+    end
+
+    where(id: ids.uniq)
+  end
+
   def quantity_value
     (self[quantity_field] || 0).to_d
   end

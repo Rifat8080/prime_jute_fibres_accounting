@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_24_000500) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_25_121000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -203,6 +203,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_24_000500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "input_jute_stock_id"
+    t.decimal "input_cost_allocated", precision: 15, scale: 2
+    t.decimal "input_unit_cost_at_processing", precision: 15, scale: 4
+    t.decimal "output_unit_cost_at_processing", precision: 15, scale: 4
     t.index ["input_jute_stock_id"], name: "index_processing_batches_on_input_jute_stock_id"
     t.index ["input_product_id"], name: "index_processing_batches_on_input_product_id"
     t.index ["output_product_id"], name: "index_processing_batches_on_output_product_id"
@@ -236,6 +239,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_24_000500) do
     t.string "unit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "purchase_allocations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "jute_purchase_id", null: false
+    t.uuid "processing_batch_id", null: false
+    t.decimal "quantity_allocated", precision: 15, scale: 3, null: false
+    t.decimal "amount_allocated", precision: 15, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jute_purchase_id"], name: "index_purchase_allocations_on_jute_purchase_id"
+    t.index ["processing_batch_id"], name: "index_purchase_allocations_on_processing_batch_id"
   end
 
   create_table "purchase_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -340,6 +354,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_24_000500) do
     t.uuid "reference_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "jute_stock_id"
+    t.index ["jute_stock_id"], name: "index_stock_movements_on_jute_stock_id"
     t.index ["product_id"], name: "index_stock_movements_on_product_id"
     t.index ["warehouse_id"], name: "index_stock_movements_on_warehouse_id"
   end

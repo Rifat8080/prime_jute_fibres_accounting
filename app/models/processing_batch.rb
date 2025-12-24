@@ -3,6 +3,7 @@ class ProcessingBatch < ApplicationRecord
   belongs_to :input_product, class_name: "Product", optional: true
   belongs_to :output_product, class_name: "Product", optional: true
   belongs_to :input_jute_stock, class_name: "JuteStock", optional: true
+  # processing batches are associated to input_jute_stock; do not link to JutePurchase
 
   attr_accessor :_selected_input_stock, :_processing_applied
 

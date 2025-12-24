@@ -3,7 +3,7 @@ class JuteStocksController < ApplicationController
 
   # GET /jute_stocks
   def index
-    @jute_stocks = JuteStock.all
+    @jute_stocks = JuteStock.for_purchases
   end
 
   # GET /jute_stocks/1

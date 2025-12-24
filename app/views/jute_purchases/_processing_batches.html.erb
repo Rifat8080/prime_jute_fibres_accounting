@@ -1,0 +1,36 @@
+<div class="mt-6">
+  <h2 class="text-sm font-medium text-gray-700">Processing Batches</h2>
+
+  <div class="mt-2">
+    <%= link_to 'New Processing Batch', new_jute_purchase_processing_batch_path(jute_purchase), class: 'px-3 py-2 bg-indigo-600 text-white rounded' %>
+  </div>
+
+  <% if jute_purchase.processing_batches.any? %>
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Input</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Output</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Processed</th>
+            <th class="px-4 py-2"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% jute_purchase.processing_batches.order(created_at: :desc).each do |pb| %>
+            <tr>
+              <td class="px-4 py-2 text-sm"><%= pb.id %></td>
+              <td class="px-4 py-2 text-sm"><%= pb.input_quantity %> kg (<%= pb.input_product&.name %>)</td>
+              <td class="px-4 py-2 text-sm"><%= pb.output_quantity || 0 %> kg (<%= pb.output_product&.name %>)</td>
+              <td class="px-4 py-2 text-sm"><%= pb.processed_date %></td>
+              <td class="px-4 py-2 text-sm"><%= link_to 'Show', processing_batch_path(pb), class: 'text-blue-600' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="mt-2 text-sm text-gray-500">No processing batches linked to this purchase.</p>
+  <% end %>
+</div>
