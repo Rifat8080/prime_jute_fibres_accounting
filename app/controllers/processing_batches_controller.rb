@@ -5,9 +5,9 @@ class ProcessingBatchesController < ApplicationController
   def index
     @processing_batches = if @jute_stock
                             ProcessingBatch.where(input_jute_stock_id: @jute_stock.id).order(created_at: :desc)
-                          else
+    else
                             ProcessingBatch.order(created_at: :desc).limit(50)
-                          end
+    end
   end
 
   def new

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :stock_houses
   resources :jute_purchases
   resources :jute_stocks do
-    resources :processing_batches, only: [:index, :new, :create]
+    resources :processing_batches, only: [ :index, :new, :create ]
   end
   resources :procurement_costs
   resources :jute_stocks
