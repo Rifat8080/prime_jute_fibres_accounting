@@ -146,7 +146,7 @@ class StockMovement < ApplicationRecord
     end
     if has_attribute?("allocated_quantity")
       # Use a database-level update to avoid race conditions in concurrent requests.
-      self.class.where(id: id).update_all(["allocated_quantity = allocated_quantity + ?", amount.to_s])
+      self.class.where(id: id).update_all([ "allocated_quantity = allocated_quantity + ?", amount.to_s ])
       reload
     else
       # If the column is not present, nothing persistent to update — caller should handle fallback.
@@ -156,7 +156,7 @@ class StockMovement < ApplicationRecord
   def release!(amount)
     return if amount.to_d <= 0
     if has_attribute?("allocated_quantity")
-      self.class.where(id: id).update_all(["allocated_quantity = GREATEST(allocated_quantity - ?, 0)", amount.to_s])
+      self.class.where(id: id).update_all([ "allocated_quantity = GREATEST(allocated_quantity - ?, 0)", amount.to_s ])
       reload
     end
   end

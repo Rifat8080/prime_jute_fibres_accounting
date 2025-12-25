@@ -5,9 +5,9 @@ class ProcessingBatchesController < ApplicationController
   def index
     @processing_batches = if @jute_stock
                             @jute_stock.processing_batches.order(created_at: :desc)
-                          else
+    else
                             ProcessingBatch.order(created_at: :desc).limit(50)
-                          end
+    end
   end
 
   def new
@@ -86,6 +86,6 @@ class ProcessingBatchesController < ApplicationController
 
   def processing_batch_params
     params.require(:processing_batch).permit(:input_product_id, :output_product_id, :input_quantity, :output_quantity, :waste_quantity, :cost, :processed_date,
-      procurement_costs_attributes: [:id, :cost_type, :amount, :cost_date, :description, :_destroy])
+      procurement_costs_attributes: [ :id, :cost_type, :amount, :cost_date, :description, :_destroy ])
   end
 end

@@ -19,7 +19,7 @@ class ProcessingBatch < ApplicationRecord
   validate :stock_movement_allowed
   validate :stock_jute_movements_quantity_available
   has_many :procurement_costs, as: :costable, dependent: :destroy
-  accepts_nested_attributes_for :procurement_costs, allow_destroy: true, reject_if: proc { |attrs| attrs['amount'].blank? && attrs['cost_type'].blank? }
+  accepts_nested_attributes_for :procurement_costs, allow_destroy: true, reject_if: proc { |attrs| attrs["amount"].blank? && attrs["cost_type"].blank? }
 
   validate :sufficient_input_stock
   validate :output_or_waste_present
@@ -54,9 +54,9 @@ class ProcessingBatch < ApplicationRecord
       if sm
         js = if sm.respond_to?(:jute_stock_id) && sm.jute_stock_id.present?
                JuteStock.find_by(id: sm.jute_stock_id)
-             else
+        else
                JuteStock.find_by(product_id: sm.product_id, stock_house_id: sm.respond_to?(:warehouse_id) ? sm.warehouse_id : nil)
-             end
+        end
         @_selected_input_stock = js if js
       end
     end
@@ -148,13 +148,13 @@ class ProcessingBatch < ApplicationRecord
     if input_quantity.blank?
       qty = if sm.respond_to?(:movement_quantity)
               sm.movement_quantity
-            elsif sm.respond_to?(:quantity) && sm.quantity.present?
+      elsif sm.respond_to?(:quantity) && sm.quantity.present?
               sm.quantity
-            elsif sm.respond_to?(:quantity_bales) && sm.quantity_bales.present?
+      elsif sm.respond_to?(:quantity_bales) && sm.quantity_bales.present?
               sm.quantity_bales
-            else
+      else
               nil
-            end
+      end
       self.input_quantity = qty if qty.present?
     end
 
@@ -163,10 +163,10 @@ class ProcessingBatch < ApplicationRecord
       begin
         movement_qty = BigDecimal(sm.movement_quantity.to_s)
         take = BigDecimal(input_quantity.to_s)
-        proportion = [take / movement_qty, 1.to_d].min
+        proportion = [ take / movement_qty, 1.to_d ].min
         allocated = BigDecimal(sm.total_amount.to_s) * proportion
         write_attribute(:input_cost_allocated, allocated)
-        write_attribute(:input_unit_cost_at_processing, (allocated / take) ) if take > 0
+        write_attribute(:input_unit_cost_at_processing, (allocated / take)) if take > 0
       rescue => _e
         # ignore allocation errors
       end
@@ -184,9 +184,9 @@ class ProcessingBatch < ApplicationRecord
 
     # Find candidate incoming movements for this stock (FIFO by movement_date/created_at)
     movements = if StockMovement.column_names.include?("jute_stock_id")
-      StockMovement.where(jute_stock_id: js.id, movement_type: 'incoming').order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
+      StockMovement.where(jute_stock_id: js.id, movement_type: "incoming").order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
     else
-      StockMovement.where(product_id: js.product_id, warehouse_id: js.stock_house_id, movement_type: 'incoming').order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
+      StockMovement.where(product_id: js.product_id, warehouse_id: js.stock_house_id, movement_type: "incoming").order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
     end
 
     return if movements.none?
@@ -197,12 +197,12 @@ class ProcessingBatch < ApplicationRecord
     movements.find_each do |m|
       break if remaining <= 0
       m_qty = begin
-        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || '0').to_s)
+        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || "0").to_s)
       rescue
         0.to_d
       end
       next if m_qty <= 0
-      take = [m_qty, remaining].min
+      take = [ m_qty, remaining ].min
       if m.respond_to?(:total_amount) && m.total_amount.present? && m_qty > 0
         unit = BigDecimal(m.total_amount.to_s) / m_qty
         allocated_total += unit * take
@@ -232,7 +232,7 @@ class ProcessingBatch < ApplicationRecord
           errors.add(:input_quantity, "exceeds available quantity on the referenced stock movement (available: #{avail.to_s('F')} kg)")
         end
       else
-        movement_qty = BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || '0').to_s)
+        movement_qty = BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || "0").to_s)
         existing = ProcessingBatch.where(stock_movement_id: sm.id).where.not(id: id).sum(:input_quantity).to_d
         new_total = existing + BigDecimal(input_quantity.to_s)
         if new_total > movement_qty
@@ -277,7 +277,7 @@ class ProcessingBatch < ApplicationRecord
 
     total_available = movement_scope.sum do |m|
       begin
-        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || '0').to_s)
+        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || "0").to_s)
       rescue
         0.to_d
       end
@@ -328,11 +328,11 @@ class ProcessingBatch < ApplicationRecord
         # Prefer the movement's available_quantity helper if it exists
         available = if sm.respond_to?(:available_quantity)
                       sm.available_quantity
-                    else
-                      BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || '0').to_s)
-                    end
+        else
+                      BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || "0").to_s)
+        end
 
-        take = [available, required].min
+        take = [ available, required ].min
         if take > 0
           Rails.logger.info("ProcessingBatch##{id} consuming #{take} from existing StockMovement #{sm.id}")
           # Persist allocation on the movement when supported to avoid creating an outgoing movement
