@@ -13,6 +13,7 @@ class JutePurchase < ApplicationRecord
   before_validation :calculate_total_amount
 
   after_create :allocate_to_stock
+  after_save :update_stock_movement_total_amount, if: -> { saved_change_to_total_amount? }
   after_update :reallocate_stock, if: -> { saved_change_to_quantity_kg? || saved_change_to_product_id? || saved_change_to_stock_house_id? || saved_change_to_purchase_date? }
 
   def calculate_total_amount
@@ -171,4 +172,18 @@ class JutePurchase < ApplicationRecord
   end
 
   private
+
+  # Ensure only stock movements created for this purchase receive this
+  # purchase's total_amount (including its procurement costs). Older
+  # behaviour accidentally overwrote other movements for the same
+  # JuteStock — update only movements that reference this purchase.
+  def update_stock_movement_total_amount
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+
+    if StockMovement.column_names.include?("source_type") && StockMovement.column_names.include?("source_id")
+      StockMovement.where(source_type: self.class.name, source_id: id).update_all(total_amount: total_amount)
+    elsif StockMovement.column_names.include?("reference_type") && StockMovement.column_names.include?("reference_id")
+      StockMovement.where(reference_type: self.class.name, reference_id: id).update_all(total_amount: total_amount)
+    end
+  end
 end
