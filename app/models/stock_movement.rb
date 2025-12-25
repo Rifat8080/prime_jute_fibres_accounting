@@ -121,4 +121,43 @@ class StockMovement < ApplicationRecord
       jute_stock&.touch
     end
   end
+
+  # Allocated quantity is the portion of this incoming movement that has
+  # already been assigned to processing batches. When present in the
+  # schema (`allocated_quantity` decimal column) we keep it separate from
+  # the original movement quantity so we can create multiple processing
+  # batches that draw from the same incoming movement.
+  def allocated_quantity
+    if has_attribute?("allocated_quantity")
+      (self[:allocated_quantity] || 0).to_d
+    else
+      0.to_d
+    end
+  end
+
+  def available_quantity
+    (movement_quantity || 0.to_d) - allocated_quantity
+  end
+
+  def allocate!(amount)
+    return if amount.to_d <= 0
+    if amount.to_d > available_quantity
+      raise ArgumentError, "allocation amount #{amount} exceeds available quantity #{available_quantity}"
+    end
+    if has_attribute?("allocated_quantity")
+      # Use a database-level update to avoid race conditions in concurrent requests.
+      self.class.where(id: id).update_all(["allocated_quantity = allocated_quantity + ?", amount.to_s])
+      reload
+    else
+      # If the column is not present, nothing persistent to update — caller should handle fallback.
+    end
+  end
+
+  def release!(amount)
+    return if amount.to_d <= 0
+    if has_attribute?("allocated_quantity")
+      self.class.where(id: id).update_all(["allocated_quantity = GREATEST(allocated_quantity - ?, 0)", amount.to_s])
+      reload
+    end
+  end
 end

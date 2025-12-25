@@ -17,9 +17,41 @@
 </p>
 
 <p>
+  <strong>Output Type:</strong>
+  <% product = @stock_movement.jute_stock&.product || (defined?(Product) ? Product.find_by(id: @stock_movement.product_id) : nil) %>
+  <%= product&.product_type.presence || '—' %>
+</p>
+
+<p>
   <strong>Quantity (kg):</strong>
   <%= number_with_precision(@stock_movement.movement_quantity, precision: 3) %>
 </p>
+
+<%# Show remaining available quantity for processing when this movement is referenced by ProcessingBatches %>
+<% if defined?(ProcessingBatch) && ProcessingBatch.table_exists? && @stock_movement.respond_to?(:movement_quantity) && @stock_movement.movement_quantity.present? %>
+  <% begin %>
+    <% if @stock_movement.respond_to?(:available_quantity) %>
+      <% remaining = @stock_movement.available_quantity.to_d %>
+    else
+      <% movement_qty = BigDecimal(@stock_movement.movement_quantity.to_s) %>
+      <% assigned = ProcessingBatch.where(stock_movement_id: @stock_movement.id).sum(:input_quantity).to_d %>
+      <% remaining = movement_qty - (assigned || 0) %>
+    <% end %>
+    <% remaining = 0.to_d if remaining < 0 %>
+  <% rescue => _e %>
+    <% remaining = nil %>
+  <% end %>
+
+  <% if remaining %>
+    <p>
+      <strong>Available for Processing:</strong>
+      <%= number_with_precision(remaining, precision: 3) %> kg
+      <% if remaining <= 0 %>
+        <span style="color: #b91c1c; font-weight: 600;">(no quantity remaining)</span>
+      <% end %>
+    </p>
+  <% end %>
+<% end %>
 
 <p>
   <strong>Total Amount:</strong>
@@ -46,9 +78,22 @@
              end %>
   <%= simple_format(notes) if notes.present? %>
 </p>
-
 <%= link_to 'Edit', edit_stock_movement_path(@stock_movement) %> |
 <%= link_to 'Back', stock_movements_path %>
+
+<div class="mt-4">
+  <%# Allow creating a ProcessingBatch prefilled from this stock movement %>
+  <% if defined?(ProcessingBatch) && ProcessingBatch.table_exists? && @stock_movement.incoming? %>
+    <%# Provide two options: create a portion (leave input blank for user) or use the full available movement quantity %>
+    <%= link_to 'Create Processing Batch (portion)', new_processing_batch_path(stock_movement_id: @stock_movement.id, input_product_id: @stock_movement.product_id, processed_date: (@stock_movement.movement_date || Date.today)), class: 'px-3 py-2 bg-green-600 text-white rounded mr-2' %>
+    <% full_qty = @stock_movement.respond_to?(:available_quantity) ? @stock_movement.available_quantity : @stock_movement.movement_quantity %>
+    <%= link_to 'Create Processing Batch (use full movement)', new_processing_batch_path(stock_movement_id: @stock_movement.id, input_product_id: @stock_movement.product_id, input_quantity: full_qty, processed_date: (@stock_movement.movement_date || Date.today)), class: 'px-3 py-2 bg-blue-600 text-white rounded' %>
+  <% else %>
+    <% if defined?(ProcessingBatch) && ProcessingBatch.table_exists? %>
+      <span class="text-sm text-gray-500">Processing batches cannot be created from non-incoming movements.</span>
+    <% end %>
+  <% end %>
+</div>
 <p id="notice"><%= notice %></p>
 
 <h1>Stock Movement</h1>

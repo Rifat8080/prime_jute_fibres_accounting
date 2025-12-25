@@ -49,6 +49,7 @@
             <tr>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Type</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Product</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Output Product</th>
               <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity</th>
               <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Total Amount</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
@@ -75,6 +76,22 @@
                   <% prod_name = sm.jute_stock&.product&.name || (defined?(Product) ? Product.find_by(id: sm.product_id)&.name : nil) %>
                   <%= prod_name.presence || '—' %>
                 </td>
+                <td class="px-4 py-2 text-sm">
+                  <%# If this movement was created as the output of a ProcessingBatch, show that batch's output product %>
+                  <% output_name = nil %>
+                  <% begin %>
+                    <% if sm.respond_to?(:source_type) && sm.respond_to?(:source_id) && sm.source_type == 'ProcessingBatch' && sm.source_id.present? %>
+                      <% pb = ProcessingBatch.find_by(id: sm.source_id) %>
+                      <% output_name = pb&.output_product&.name if pb %>
+                    <% elsif sm.respond_to?(:reference_type) && sm.respond_to?(:reference_id) && sm.reference_type == 'ProcessingBatch' && sm.reference_id.present? %>
+                      <% pb = ProcessingBatch.find_by(id: sm.reference_id) %>
+                      <% output_name = pb&.output_product&.name if pb %>
+                    <% end %>
+                  <% rescue => _e %>
+                    <% output_name = nil %>
+                  <% end %>
+                  <%= output_name.presence || '—' %>
+                </td>
                 <td class="px-4 py-2 text-sm text-right"><%= qty %></td>
                 <td class="px-4 py-2 text-sm text-right">
                   <% if StockMovement.column_names.include?("total_amount") && sm.respond_to?(:total_amount) && sm.total_amount.present? %>
@@ -98,6 +115,9 @@
 
   <div class="bg-white rounded shadow p-4">
     <h2 class="text-lg font-semibold mb-2">Processing Batches</h2>
+    <div class="mb-2">
+      <%= link_to 'New Processing Batch for this stock', new_processing_batch_path(jute_stock_id: @jute_stock.id, input_product_id: @jute_stock.product_id), class: 'px-3 py-2 bg-indigo-600 text-white rounded' %>
+    </div>
     <% pbs = @jute_stock.processing_batches %>
     <% if pbs.any? %>
       <div class="overflow-x-auto">

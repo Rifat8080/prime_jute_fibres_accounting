@@ -5,15 +5,38 @@
     <%= f.collection_select :input_product_id, Product.all.order(:name), :id, :name, include_blank: true %>
   </div>
 
-  <div>
-    <%= f.label :input_jute_stock_id, 'Input stock (choose specific jute stock to consume)' %><br>
-    <%= f.collection_select :input_jute_stock_id, JuteStock.all.includes(:product, :stock_house).map { |s| ["#{s.product&.name || 'unknown'} — #{s.stock_house&.name || 'house'} (#{s.quantity_value} kg)", s.id] }, :second, :first, include_blank: true %>
-  </div>
 
   <div>
     <%= f.label :input_quantity %><br>
     <%= f.number_field :input_quantity, step: 0.01 %>
   </div>
+
+  <fieldset class="mt-4">
+    <legend class="text-sm font-medium">Processing Costs (optional)</legend>
+    <% f.fields_for :procurement_costs do |cf| %>
+      <div class="border rounded p-2 mb-2">
+        <div>
+          <%= cf.label :cost_type %><br>
+          <%= cf.text_field :cost_type %>
+        </div>
+        <div>
+          <%= cf.label :amount %><br>
+          <%= cf.number_field :amount, step: 0.01 %>
+        </div>
+        <div>
+          <%= cf.label :cost_date %><br>
+          <%= cf.date_field :cost_date %>
+        </div>
+        <div>
+          <%= cf.label :description %><br>
+          <%= cf.text_area :description, rows: 2 %>
+        </div>
+        <div>
+          <%= cf.check_box :_destroy %> <%= cf.label :_destroy, 'Remove this cost' %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
 
   <div>
     <%= f.label :output_product_id, 'Output product' %><br>

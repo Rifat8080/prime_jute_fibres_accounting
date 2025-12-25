@@ -1,16 +1,31 @@
 class ProcessingBatch < ApplicationRecord
-  # columns: input_product_id, output_product_id, input_quantity, output_quantity, cost, input_jute_stock_id
+  # columns: input_product_id, output_product_id, input_quantity, output_quantity, cost
   belongs_to :input_product, class_name: "Product", optional: true
   belongs_to :output_product, class_name: "Product", optional: true
-  belongs_to :input_jute_stock, class_name: "JuteStock", optional: true
-  # processing batches are associated to input_jute_stock; do not link to JutePurchase
+  # ProcessingBatch used to reference an explicit `input_jute_stock` (JuteStock).
+  # Processing should now be represented via `StockMovement` records. The
+  # direct association to `JuteStock` is intentionally removed from the model.
 
   attr_accessor :_selected_input_stock, :_processing_applied
+  # transient reference to a StockMovement used as source for this processing
+  attr_accessor :source_stock_movement_id
+  # transient reference to a JuteStock used as source for available quantity
+  attr_accessor :source_jute_stock_id
+  belongs_to :stock_movement, optional: true
+
+  before_validation :apply_source_stock_movement_price, if: -> { source_stock_movement_id.present? }
+  before_validation :apply_source_jute_stock_allocation, if: -> { source_jute_stock_id.present? }
+  validate :stock_movement_quantity_available
+  validate :stock_movement_allowed
+  validate :stock_jute_movements_quantity_available
+  has_many :procurement_costs, as: :costable, dependent: :destroy
+  accepts_nested_attributes_for :procurement_costs, allow_destroy: true, reject_if: proc { |attrs| attrs['amount'].blank? && attrs['cost_type'].blank? }
 
   validate :sufficient_input_stock
   validate :output_or_waste_present
 
   after_create :apply_processing
+  after_destroy :release_stock_movement_allocation
 
   def already_applied?
     @_processing_applied == true
@@ -19,35 +34,32 @@ class ProcessingBatch < ApplicationRecord
   private
 
   def sufficient_input_stock
-    # Require an input quantity and either an input product or a specific input_jute_stock
+    # Require an input quantity and an input product (processing is product-driven)
     if input_quantity.blank?
       errors.add(:input_quantity, "is required")
       return
     end
-    if input_product_id.blank? && input_jute_stock_id.blank?
-      errors.add(:base, "Select an input product or a specific input stock")
+
+    if input_product_id.blank?
+      errors.add(:base, "Select an input product")
       return
     end
 
-    # If a specific stock id was provided, validate that single stock
-    if input_jute_stock_id.present?
-      js = JuteStock.find_by(id: input_jute_stock_id)
-      unless js
-        errors.add(:input_jute_stock_id, "is not valid")
-        return
-      end
-      available = BigDecimal(js.quantity_value.to_s)
-      needed = BigDecimal(input_quantity.to_s)
-      if available < needed
-        errors.add(:input_quantity, "not enough stock (available: #{available.to_s('F')} kg, requested: #{needed.to_s('F')} kg)")
-      else
-        @_selected_input_stock = js
-      end
-      return
-    end
-
-    # If input_product_id is provided, find all stocks for that product
+    # Find all stocks for the input product and ensure enough quantity exists
     stocks = resolve_input_stocks
+
+    # If a source stock movement was provided, prefer the stock referenced by it
+    if source_stock_movement_id.present? && defined?(StockMovement) && StockMovement.table_exists?
+      sm = StockMovement.find_by(id: source_stock_movement_id)
+      if sm
+        js = if sm.respond_to?(:jute_stock_id) && sm.jute_stock_id.present?
+               JuteStock.find_by(id: sm.jute_stock_id)
+             else
+               JuteStock.find_by(product_id: sm.product_id, stock_house_id: sm.respond_to?(:warehouse_id) ? sm.warehouse_id : nil)
+             end
+        @_selected_input_stock = js if js
+      end
+    end
 
     unless stocks.present?
       errors.add(:input_quantity, "no input stock found for selected product")
@@ -121,11 +133,168 @@ class ProcessingBatch < ApplicationRecord
     stocks
   end
 
+  def apply_source_stock_movement_price
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+    sm = StockMovement.find_by(id: source_stock_movement_id || stock_movement_id)
+    return unless sm
+
+    # If the movement is not an incoming movement, disallow using it as source
+    if sm.outgoing? || sm.transfer?
+      errors.add(:stock_movement_id, "cannot be used as source (movement type #{sm.movement_type})")
+      return
+    end
+
+    # Prefill quantity from the movement if not already set
+    if input_quantity.blank?
+      qty = if sm.respond_to?(:movement_quantity)
+              sm.movement_quantity
+            elsif sm.respond_to?(:quantity) && sm.quantity.present?
+              sm.quantity
+            elsif sm.respond_to?(:quantity_bales) && sm.quantity_bales.present?
+              sm.quantity_bales
+            else
+              nil
+            end
+      self.input_quantity = qty if qty.present?
+    end
+
+    # Allocate cost proportionally from the stock movement's total_amount when available
+    if sm.respond_to?(:total_amount) && sm.total_amount.present? && sm.respond_to?(:movement_quantity) && sm.movement_quantity.to_d > 0
+      begin
+        movement_qty = BigDecimal(sm.movement_quantity.to_s)
+        take = BigDecimal(input_quantity.to_s)
+        proportion = [take / movement_qty, 1.to_d].min
+        allocated = BigDecimal(sm.total_amount.to_s) * proportion
+        write_attribute(:input_cost_allocated, allocated)
+        write_attribute(:input_unit_cost_at_processing, (allocated / take) ) if take > 0
+      rescue => _e
+        # ignore allocation errors
+      end
+    end
+  end
+
+  # Allocate cost when sourcing from a JuteStock (multiple stock movements)
+  def apply_source_jute_stock_allocation
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+    js = JuteStock.find_by(id: source_jute_stock_id)
+    return unless js
+
+    required = BigDecimal(input_quantity.to_s) rescue nil
+    return unless required && required > 0
+
+    # Find candidate incoming movements for this stock (FIFO by movement_date/created_at)
+    movements = if StockMovement.column_names.include?("jute_stock_id")
+      StockMovement.where(jute_stock_id: js.id, movement_type: 'incoming').order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
+    else
+      StockMovement.where(product_id: js.product_id, warehouse_id: js.stock_house_id, movement_type: 'incoming').order(Arel.sql("COALESCE(movement_date, created_at) ASC"))
+    end
+
+    return if movements.none?
+
+    allocated_total = 0.to_d
+    remaining = required
+
+    movements.find_each do |m|
+      break if remaining <= 0
+      m_qty = begin
+        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || '0').to_s)
+      rescue
+        0.to_d
+      end
+      next if m_qty <= 0
+      take = [m_qty, remaining].min
+      if m.respond_to?(:total_amount) && m.total_amount.present? && m_qty > 0
+        unit = BigDecimal(m.total_amount.to_s) / m_qty
+        allocated_total += unit * take
+      end
+      remaining -= take
+    end
+
+    # store allocated cost and unit cost (unit cost = allocated_total / required)
+    if allocated_total > 0
+      write_attribute(:input_cost_allocated, allocated_total)
+      write_attribute(:input_unit_cost_at_processing, (allocated_total / required))
+    end
+  end
+
+  def stock_movement_quantity_available
+    return if stock_movement_id.blank? || input_quantity.blank?
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+
+    sm = StockMovement.find_by(id: stock_movement_id)
+    return unless sm
+
+    begin
+      # Prefer the movement's available_quantity if provided by the model
+      if sm.respond_to?(:available_quantity)
+        avail = sm.available_quantity
+        if BigDecimal(input_quantity.to_s) > avail
+          errors.add(:input_quantity, "exceeds available quantity on the referenced stock movement (available: #{avail.to_s('F')} kg)")
+        end
+      else
+        movement_qty = BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || '0').to_s)
+        existing = ProcessingBatch.where(stock_movement_id: sm.id).where.not(id: id).sum(:input_quantity).to_d
+        new_total = existing + BigDecimal(input_quantity.to_s)
+        if new_total > movement_qty
+          errors.add(:input_quantity, "exceeds available quantity on the referenced stock movement (available: ")
+          errors.add(:stock_movement_id, "total assigned to processing (#{new_total.to_s('F')}) exceeds movement quantity (#{movement_qty.to_s('F')})")
+        end
+      end
+    rescue => e
+      Rails.logger.warn("ProcessingBatch#stock_movement_quantity_available check failed: #{e.class} #{e.message}")
+    end
+  end
+
+  def stock_movement_allowed
+    return if stock_movement_id.blank?
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+    sm = StockMovement.find_by(id: stock_movement_id)
+    return unless sm
+    if sm.outgoing? || sm.transfer?
+      errors.add(:stock_movement_id, "cannot be used as source because movement is #{sm.movement_type}")
+    end
+  end
+
+  # When a jute stock is provided as the source, ensure the total input_quantity
+  # assigned across processing batches referencing movements for that stock
+  # does not exceed the sum of those stock movements' quantities.
+  def stock_jute_movements_quantity_available
+    return if source_jute_stock_id.blank? || input_quantity.blank?
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+
+    # Find relevant stock movements for the jute stock: prefer direct jute_stock_id, fallback to product+warehouse
+    movement_scope = StockMovement.none
+    if StockMovement.column_names.include?("jute_stock_id")
+      movement_scope = StockMovement.where(jute_stock_id: source_jute_stock_id)
+    else
+      js = JuteStock.find_by(id: source_jute_stock_id)
+      if js
+        movement_scope = StockMovement.where(product_id: js.product_id, warehouse_id: js.stock_house_id)
+      end
+    end
+
+    return if movement_scope.none?
+
+    total_available = movement_scope.sum do |m|
+      begin
+        BigDecimal(m.respond_to?(:movement_quantity) ? m.movement_quantity.to_s : (m.quantity || m.quantity_bales || '0').to_s)
+      rescue
+        0.to_d
+      end
+    end.to_d
+
+    assigned = ProcessingBatch.where(stock_movement_id: movement_scope.pluck(:id)).where.not(id: id).sum(:input_quantity).to_d
+    new_total = assigned + BigDecimal(input_quantity.to_s)
+    if new_total > total_available
+      errors.add(:input_quantity, "exceeds available total quantity for selected stock (available: #{total_available.to_s('F')} kg, assigned: #{assigned.to_s('F')} kg)")
+    end
+  end
+
   def apply_processing
     return if already_applied?
 
     ActiveRecord::Base.transaction do
-      Rails.logger.info("ProcessingBatch##{id} apply_processing start: input_product_id=#{input_product_id.inspect}, input_jute_stock_id=#{input_jute_stock_id.inspect}, input_quantity=#{input_quantity}")
+      Rails.logger.info("ProcessingBatch##{id} apply_processing start: input_product_id=#{input_product_id.inspect}, input_quantity=#{input_quantity}")
 
       # Process input consumption
       consume_input_stocks
@@ -152,18 +321,34 @@ class ProcessingBatch < ApplicationRecord
 
     required = BigDecimal(input_quantity.to_s)
 
+    # If a source stock movement was supplied, consume from it first (but do not re-create an outgoing movement for that portion)
+    if source_stock_movement_id.present? && defined?(StockMovement) && StockMovement.table_exists?
+      sm = StockMovement.find_by(id: source_stock_movement_id)
+      if sm
+        # Prefer the movement's available_quantity helper if it exists
+        available = if sm.respond_to?(:available_quantity)
+                      sm.available_quantity
+                    else
+                      BigDecimal(sm.respond_to?(:movement_quantity) ? sm.movement_quantity.to_s : (sm.quantity || sm.quantity_bales || '0').to_s)
+                    end
+
+        take = [available, required].min
+        if take > 0
+          Rails.logger.info("ProcessingBatch##{id} consuming #{take} from existing StockMovement #{sm.id}")
+          # Persist allocation on the movement when supported to avoid creating an outgoing movement
+          if sm.respond_to?(:allocate!)
+            sm.allocate!(take)
+          end
+          required -= take
+        end
+      end
+    end
+
     # Build candidate stocks using same logic as validation
-    candidates = []
-    if input_jute_stock_id.present?
-      # Use the explicitly selected stock
-      js = JuteStock.find_by(id: input_jute_stock_id)
-      candidates = [ js ].compact
-    elsif @_selected_input_stock.present?
-      # Use the stock selected during validation
-      candidates = [ @_selected_input_stock ]
+    candidates = if @_selected_input_stock.present?
+      [ @_selected_input_stock ]
     else
-      # Fallback: resolve stocks using the same method as validation
-      candidates = resolve_input_stocks.sort_by { |s| -BigDecimal(s.quantity_value.to_s) }
+      resolve_input_stocks.sort_by { |s| -BigDecimal(s.quantity_value.to_s) }
     end
 
     Rails.logger.info("ProcessingBatch##{id} candidates: [#{candidates.map { |s| "#{s.id}:#{s.quantity_value}" }.join(', ')}]")
@@ -274,9 +459,6 @@ class ProcessingBatch < ApplicationRecord
     # Try to use the same house as the input stock
     if @_selected_input_stock.present?
       return @_selected_input_stock.stock_house
-    elsif input_jute_stock_id.present?
-      js = JuteStock.find_by(id: input_jute_stock_id)
-      return js.stock_house if js
     elsif input_product_id.present?
       js = JuteStock.where(product_id: input_product_id).first
       return js.stock_house if js
@@ -321,5 +503,19 @@ class ProcessingBatch < ApplicationRecord
     end
 
     StockMovement.create!(movement_attrs)
+  end
+
+  def release_stock_movement_allocation
+    return unless stock_movement_id.present?
+    return unless defined?(StockMovement) && StockMovement.table_exists?
+    sm = StockMovement.find_by(id: stock_movement_id)
+    return unless sm
+    begin
+      if sm.respond_to?(:release!)
+        sm.release!(BigDecimal(input_quantity.to_s))
+      end
+    rescue => e
+      Rails.logger.warn("Failed to release allocation for ProcessingBatch #{id} on StockMovement #{sm.id}: #{e.class} #{e.message}")
+    end
   end
 end

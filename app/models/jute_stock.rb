@@ -73,10 +73,8 @@ class JuteStock < ApplicationRecord
       end
     end
 
-    if ProcessingBatch.column_names.include?("input_jute_stock_id")
-      ids += ProcessingBatch.where(input_jute_stock_id: id).pluck(:id) rescue []
-    end
-
+    # ProcessingBatch no longer stores `input_jute_stock_id`; infer batches
+    # that affected this stock exclusively via StockMovement links.
     ProcessingBatch.where(id: ids.uniq)
   end
 

@@ -5,7 +5,7 @@ class ProcurementCost < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :cost_date, presence: true
   validates :costable, presence: true
-  validates :costable_type, inclusion: { in: [ "JutePurchase" ] }
+  validates :costable_type, inclusion: { in: [ "JutePurchase", "ProcessingBatch" ] }
 
   after_save :update_costable_total_amount
   after_destroy :update_costable_total_amount

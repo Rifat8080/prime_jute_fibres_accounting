@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_25_124500) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_25_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -202,13 +202,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_124500) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "input_jute_stock_id"
     t.decimal "input_cost_allocated", precision: 15, scale: 2
     t.decimal "input_unit_cost_at_processing", precision: 15, scale: 4
     t.decimal "output_unit_cost_at_processing", precision: 15, scale: 4
-    t.index ["input_jute_stock_id"], name: "index_processing_batches_on_input_jute_stock_id"
+    t.uuid "stock_movement_id"
     t.index ["input_product_id"], name: "index_processing_batches_on_input_product_id"
     t.index ["output_product_id"], name: "index_processing_batches_on_output_product_id"
+    t.index ["stock_movement_id"], name: "index_processing_batches_on_stock_movement_id"
   end
 
   create_table "processing_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -356,6 +356,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_124500) do
     t.datetime "updated_at", null: false
     t.uuid "jute_stock_id"
     t.decimal "total_amount"
+    t.decimal "allocated_quantity", precision: 16, scale: 3, default: "0.0", null: false
     t.index ["jute_stock_id"], name: "index_stock_movements_on_jute_stock_id"
     t.index ["product_id"], name: "index_stock_movements_on_product_id"
     t.index ["warehouse_id"], name: "index_stock_movements_on_warehouse_id"
