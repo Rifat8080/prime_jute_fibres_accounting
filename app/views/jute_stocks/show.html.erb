@@ -52,6 +52,7 @@
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Output Product</th>
               <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Quantity</th>
               <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Total Amount</th>
+              <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Cost / kg</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
               <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Notes</th>
               <th class="px-4 py-2"></th>
@@ -96,6 +97,13 @@
                 <td class="px-4 py-2 text-sm text-right">
                   <% if StockMovement.column_names.include?("total_amount") && sm.respond_to?(:total_amount) && sm.total_amount.present? %>
                     <%= number_to_currency(sm.total_amount, unit: '৳') %>
+                  <% else %>
+                    —
+                  <% end %>
+                </td>
+                <td class="px-4 py-2 text-sm text-right">
+                  <% if sm.respond_to?(:cost_per_kg) && sm.cost_per_kg.present? %>
+                    <%= number_to_currency(sm.cost_per_kg, unit: '৳') %>
                   <% else %>
                     —
                   <% end %>

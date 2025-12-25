@@ -31,6 +31,18 @@ class StockMovement < ApplicationRecord
     end
   end
 
+  # Returns the cost per kg (or per unit) for this movement when a
+  # `total_amount` is present. Returns nil when amount or quantity
+  # is not available or quantity is zero.
+  def cost_per_kg
+    return nil unless has_attribute?("total_amount") && self[:total_amount].present?
+    q = movement_quantity
+    return nil if q.nil? || q.to_d == 0
+    BigDecimal(self[:total_amount].to_s) / q.to_d
+  rescue => _e
+    nil
+  end
+
   # Backwards-compatible setter: allow controllers or forms to set `jute_stock_id`
   # even when the DB schema doesn't have that column. Map to product/warehouse.
   def jute_stock_id=(val)
