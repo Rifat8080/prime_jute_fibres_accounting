@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :suppliers
   resources :stock_houses
   resources :jute_purchases
@@ -22,7 +23,6 @@ Rails.application.routes.draw do
   resources :shipment_documents
   resources :users
 
-  devise_for :users
   get "posts/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

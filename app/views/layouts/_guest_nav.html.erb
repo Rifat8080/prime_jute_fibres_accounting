@@ -1,0 +1,15 @@
+<nav class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center justify-start">
+        <a href="/" class="flex ml-2 md:mr-24">
+          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Prime Jute Fibres</span>
+        </a>
+      </div>
+      <div class="flex items-center">
+        <%= link_to 'Login', new_user_session_path, class: "text-gray-900 hover:text-blue-700 dark:text-white dark:hover:text-blue-300 mr-4" %>
+        <%= link_to 'Sign Up', new_user_registration_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    </div>
+  </div>
+</nav>
