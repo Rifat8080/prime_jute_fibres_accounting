@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  
+
   # Posts routes
   get "posts/index"
   get "home" => "posts#index", as: :home
