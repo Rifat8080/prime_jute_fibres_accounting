@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
+  
+  # Posts routes
+  get "posts/index"
+  get "home" => "posts#index", as: :home
+  get "dashboard" => "posts#dashboard", as: :dashboard
+  root "posts#index"
+
   resources :suppliers
   resources :stock_houses
   resources :jute_purchases
@@ -7,7 +14,6 @@ Rails.application.routes.draw do
     resources :processing_batches, only: [ :index, :new, :create ]
   end
   resources :procurement_costs
-  resources :jute_stocks
   resources :stock_movements
   resources :processing_batches
   resources :products
@@ -23,16 +29,7 @@ Rails.application.routes.draw do
   resources :shipment_documents
   resources :users
 
-  get "posts/index"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  root "posts#index"
 end

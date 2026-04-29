@@ -1,30 +1,42 @@
-  <div class="mb-4">
-    <%= form.label :name, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.text_field :name, class: 'mt-1 block w-full border rounded py-2 px-3' %>
-  </div>
+<%= form_with(model: supplier, builder: TailwindFormBuilder) do |form| %>
+  <%= render 'shared/form_errors', object: supplier %>
 
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <%= form.label :contact_person, class: 'block text-sm font-medium text-gray-700' %>
-      <%= form.text_field :contact_person, class: 'mt-1 block w-full border rounded py-2 px-3' %>
+  <div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name, placeholder: 'Enter supplier name' %>
+      </div>
+
+      <div>
+        <%= form.label :contact_person %>
+        <%= form.text_field :contact_person, placeholder: 'Enter contact person name' %>
+      </div>
+
+      <div>
+        <%= form.label :email %>
+        <%= form.text_field :email, placeholder: 'Enter email address' %>
+      </div>
+
+      <div>
+        <%= form.label :phone %>
+        <%= form.text_field :phone, placeholder: 'Enter phone number' %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :address %>
+        <%= form.text_area :address, placeholder: 'Enter full address', rows: 3 %>
+      </div>
+
+      <div>
+        <%= form.label :supplier_type %>
+        <%= form.select :supplier_type, [['Local','local'], ['International','international']], { prompt: 'Select type' } %>
+      </div>
     </div>
-    <div>
-      <%= form.label :phone, class: 'block text-sm font-medium text-gray-700' %>
-      <%= form.text_field :phone, class: 'mt-1 block w-full border rounded py-2 px-3' %>
+
+    <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+      <%= link_to 'Cancel', suppliers_path, class: 'inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition' %>
+      <%= form.submit supplier.new_record? ? 'Create Supplier' : 'Update Supplier' %>
     </div>
   </div>
-
-  <div class="mb-4 mt-4">
-    <%= form.label :address, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.text_area :address, class: 'mt-1 block w-full border rounded py-2 px-3', rows: 3 %>
-  </div>
-
-  <div class="mb-4">
-    <%= form.label :supplier_type, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.select :supplier_type, [['Local','local'], ['International','international']], { prompt: 'Select type' }, class: 'mt-1 block w-full border rounded py-2 px-3' %>
-  </div>
-
-  <div class="flex items-center gap-3">
-    <%= form.submit class: 'bg-blue-600 text-white px-4 py-2 rounded' %>
-    <%= link_to 'Back', suppliers_path, class: 'text-sm text-gray-600' %>
-  </div>
+<% end %>

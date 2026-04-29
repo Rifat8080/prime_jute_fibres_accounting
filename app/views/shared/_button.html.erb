@@ -1,0 +1,27 @@
+<!-- Shared Button Component -->
+<% 
+  size_classes = case size
+                 when 'sm'
+                   'px-3 py-1.5 text-sm'
+                 when 'lg'
+                   'px-6 py-3 text-lg'
+                 else
+                   'px-4 py-2 text-base'
+                 end
+
+  variant_classes = case variant
+                    when 'secondary'
+                      'border-2 border-gray-300 text-gray-700 hover:bg-gray-50'
+                    when 'danger'
+                      'bg-red-600 text-white hover:bg-red-700'
+                    when 'success'
+                      'bg-green-600 text-white hover:bg-green-700'
+                    else
+                      'bg-amber-600 text-white hover:bg-amber-700'
+                    end
+
+  base_classes = "#{size_classes} #{variant_classes} rounded-lg font-medium transition"
+%>
+<button class="<%= base_classes %>">
+  <%= content %>
+</button>

@@ -1,0 +1,21 @@
+<div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
+  <table class="min-w-full">
+    <thead class="bg-gray-50 border-b border-gray-200">
+      <tr>
+        <% headers.each do |header| %>
+          <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+            <%= header %>
+          </th>
+        <% end %>
+        <% if show_actions %>
+          <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+            Actions
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <%= content %>
+    </tbody>
+  </table>
+</div>

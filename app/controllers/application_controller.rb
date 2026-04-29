@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   private
 
   def layout_by_resource
+    return "application" if controller_name == "posts" && action_name == "index"
+
     if user_signed_in?
       "authenticated"
     else

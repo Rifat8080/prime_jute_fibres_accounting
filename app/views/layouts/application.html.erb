@@ -1,35 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Prime Jute Fibres Accounting" %></title>
+    <title><%= content_for(:title) || "Prime Jute Fibres - Professional Accounting" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Professional jute fiber supply chain management and accounting solution">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
-    <%= render 'layouts/guest_nav' %>
-
-    <div class="p-4">
-      <%= yield %>
+  <body class="bg-white antialiased">
+    <div class="fixed top-0 right-0 left-0 z-50">
+      <%= render 'layouts/guest_nav' %>
     </div>
+
+    <div class="pt-16">
+      <% if notice.present? %>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
+          <div class="rounded-lg bg-green-50 border border-green-200 p-4">
+            <p class="text-sm font-medium text-green-800"><%= notice %></p>
+          </div>
+        </div>
+      <% end %>
+      
+      <% if alert.present? %>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
+          <div class="rounded-lg bg-red-50 border border-red-200 p-4">
+            <p class="text-sm font-medium text-red-800"><%= alert %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <%= yield %>
+      </main>
+    </div>
+
+    <footer class="bg-gray-900 text-white mt-20">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h3 class="text-lg font-bold mb-4">Prime Jute Fibres</h3>
+            <p class="text-gray-400 text-sm">Leading supplier of premium jute fibers with professional accounting solutions.</p>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-4 uppercase">Product</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white transition">Features</a></li>
+              <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+              <li><a href="#" class="hover:text-white transition">Security</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-4 uppercase">Company</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white transition">About</a></li>
+              <li><a href="#" class="hover:text-white transition">Blog</a></li>
+              <li><a href="#" class="hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-4 uppercase">Legal</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+              <li><a href="#" class="hover:text-white transition">Terms</a></li>
+              <li><a href="#" class="hover:text-white transition">Support</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8">
+          <p class="text-center text-gray-400 text-sm">&copy; 2026 Prime Jute Fibres. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

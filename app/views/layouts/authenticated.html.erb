@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Prime Jute Fibres Accounting" %></title>
+    <title><%= content_for(:title) || "Dashboard - Prime Jute Fibres Accounting" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -10,51 +10,73 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
-    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-      <div class="px-3 py-3 lg:px-5 lg:pl-3">
+  <body class="bg-gray-50 antialiased">
+    <!-- Top Navigation -->
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+      <div class="px-4 py-3 lg:px-6 lg:py-4">
         <div class="flex items-center justify-between">
-          <div class="flex items-center justify-start">
-            <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-                <span class="sr-only">Open sidebar</span>
-                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                   <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+          <!-- Left: Menu & Logo -->
+          <div class="flex items-center gap-4">
+            <button data-drawer-target="sidebar" data-drawer-toggle="sidebar" type="button" class="p-2 text-gray-600 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+            <%= link_to home_path, class: "flex items-center gap-2" do %>
+              <div class="flex items-center justify-center h-8 w-8 rounded-lg bg-gradient-to-br from-amber-600 to-amber-700">
+                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                 </svg>
-             </button>
-            <a href="/" class="flex ml-2 md:mr-24">
-              <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Prime Jute Fibres</span>
-            </a>
+              </div>
+              <span class="hidden md:inline text-lg font-bold text-gray-900">Prime Jute Fibres</span>
+            <% end %>
           </div>
-          <div class="flex items-center">
+
+          <!-- Right: User Menu -->
+          <div class="flex items-center gap-4">
             <%= render 'layouts/user_dropdown' %>
           </div>
         </div>
       </div>
     </nav>
 
-    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0" aria-label="Sidebar">
       <%= render 'layouts/sidebar' %>
     </aside>
 
-    <div class="p-4 sm:ml-64">
-       <div class="p-4 mt-14">
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+      <div class="pt-20 p-4 md:p-6">
+        <!-- Alert Messages -->
+        <% if notice.present? %>
+          <div class="mb-4 rounded-lg bg-green-50 border border-green-200 p-4">
+            <p class="text-sm font-medium text-green-800"><%= notice %></p>
+          </div>
+        <% end %>
+        
+        <% if alert.present? %>
+          <div class="mb-4 rounded-lg bg-red-50 border border-red-200 p-4">
+            <p class="text-sm font-medium text-red-800"><%= alert %></p>
+          </div>
+        <% end %>
+
+        <!-- Page Content -->
+        <main class="w-full">
           <%= yield %>
-       </div>
+        </main>
+      </div>
     </div>
+
+    <!-- Sidebar overlay for mobile -->
+    <div id="sidebar-backdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 lg:hidden"></div>
   </body>
 </html>

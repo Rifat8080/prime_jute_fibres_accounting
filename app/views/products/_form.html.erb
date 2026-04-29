@@ -1,25 +1,32 @@
-<%= form_with(model: product) do |f| %>
-  <div>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
+<%= form_with(model: product, builder: TailwindFormBuilder) do |form| %>
+  <%= render 'shared/form_errors', object: product %>
 
-  <div>
-    <%= f.label :product_type %><br>
-    <%= f.text_field :product_type %>
-  </div>
+  <div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name, placeholder: 'Enter product name' %>
+      </div>
 
-  <div>
-    <%= f.label :category %><br>
-    <%= f.text_field :category %>
-  </div>
+      <div>
+        <%= form.label :product_type %>
+        <%= form.text_field :product_type, placeholder: 'e.g., Raw Jute, Processed Jute' %>
+      </div>
 
-  <div>
-    <%= f.label :unit %><br>
-    <%= f.text_field :unit %>
-  </div>
+      <div>
+        <%= form.label :category %>
+        <%= form.text_field :category, placeholder: 'e.g., Fiber, Yarn, Fabric' %>
+      </div>
 
-  <div>
-    <%= f.submit %>
+      <div>
+        <%= form.label :unit %>
+        <%= form.text_field :unit, placeholder: 'e.g., kg, bales, meters' %>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+      <%= link_to 'Cancel', products_path, class: 'inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition' %>
+      <%= form.submit product.new_record? ? 'Create Product' : 'Update Product' %>
+    </div>
   </div>
 <% end %>

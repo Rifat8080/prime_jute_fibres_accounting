@@ -1,43 +1,175 @@
-<div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+<div class="h-full px-3 pb-4 overflow-y-auto bg-white">
   <ul class="space-y-2 font-medium">
+    <!-- Home -->
     <li>
-      <%= link_to 'Home', root_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <%= link_to dashboard_path, class: "flex items-center gap-3 px-3 py-2 text-gray-900 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition group" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 11l4-4m0 0l4 4m-4-4v4"></path>
+        </svg>
+        <span>Dashboard</span>
+      <% end %>
     </li>
+
+    <!-- Supply Chain Section -->
     <li>
-      <%= link_to 'Suppliers', suppliers_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Supply Chain</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to suppliers_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+            </svg>
+            <span>Suppliers</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to jute_purchases_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Purchases</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
+
+    <!-- Inventory Section -->
     <li>
-      <%= link_to 'Stock Houses', stock_houses_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider mt-4">Inventory</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to stock_houses_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+            </svg>
+            <span>Stock Houses</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to jute_stocks_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4m0 0L4 7m16 0v10l-8 4m0-4L4 7v10l8 4"></path>
+            </svg>
+            <span>Jute Stocks</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to stock_movements_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3v-6"></path>
+            </svg>
+            <span>Stock Movements</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to products_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Products</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
+
+    <!-- Processing Section -->
     <li>
-      <%= link_to 'Products', products_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider mt-4">Processing</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to processing_batches_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            <span>Processing Batches</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to procurement_costs_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>Costs</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
+
+    <!-- Sales Section -->
     <li>
-      <%= link_to 'Jute Purchases', jute_purchases_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider mt-4">Sales & Orders</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to buyers_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+            </svg>
+            <span>Buyers</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to sales_contracts_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span>Contracts</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to shipments_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            <span>Shipments</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to shipment_documents_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <span>Documents</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
+
+    <!-- Finance Section -->
     <li>
-      <%= link_to 'Jute Stocks', jute_stocks_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider mt-4">Finance</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to accounts_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Accounts</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to salaries_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Salaries</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
+
+    <!-- Administration Section -->
     <li>
-      <%= link_to 'Users', users_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Salaries', salaries_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Accounts', accounts_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Buyers', buyers_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Sales Contracts', sales_contracts_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Shipments', shipments_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
-    </li>
-    <li>
-      <%= link_to 'Shipment Documents', shipment_documents_path, class: "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <div class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider mt-4">Administration</div>
+      <ul class="space-y-1 pl-3">
+        <li>
+          <%= link_to users_path, class: "flex items-center gap-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-amber-50 hover:text-amber-700 transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+            </svg>
+            <span>Users</span>
+          <% end %>
+        </li>
+      </ul>
     </li>
   </ul>
 </div>

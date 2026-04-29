@@ -1,0 +1,14 @@
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition <%= 'p-6' if !padding.present? %>" style="<%= "padding: #{padding}" if padding.present? %>">
+  <% if title.present? %>
+    <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+      <h3 class="text-lg font-bold text-gray-900"><%= title %></h3>
+      <% if actions.present? %>
+        <div class="flex gap-2">
+          <%= actions %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <%= content %>
+</div>

@@ -1,0 +1,228 @@
+<% content_for :title, "Dashboard - Prime Jute Fibres" %>
+
+<div class="bg-white border border-gray-200 shadow-sm rounded-3xl p-6 space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+      <p class="text-gray-600 mt-1">Welcome back to Prime Jute Fibres Accounting</p>
+    </div>
+    <button class="mt-4 md:mt-0 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition font-medium">
+      Generate Report
+    </button>
+  </div>
+
+  <!-- Key Metrics Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Total Suppliers -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Total Suppliers</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">-</p>
+          <p class="text-gray-500 text-xs mt-2">Click to manage</p>
+        </div>
+        <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-blue-100">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Stock Houses -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Stock Houses</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">-</p>
+          <p class="text-gray-500 text-xs mt-2">Active warehouses</p>
+        </div>
+        <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-green-100">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Jute Stock (Units) -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Jute Stock</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">-</p>
+          <p class="text-gray-500 text-xs mt-2">Units in inventory</p>
+        </div>
+        <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-amber-100">
+          <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4m0 0L4 7m16 0v10l-8 4m0-4L4 7v10l8 4"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Orders -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Pending Orders</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">-</p>
+          <p class="text-gray-500 text-xs mt-2">To be shipped</p>
+        </div>
+        <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-purple-100">
+          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Recent Activity / Shortcuts -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <%= link_to suppliers_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-amber-400 hover:bg-amber-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-amber-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">Add Supplier</span>
+          <% end %>
+
+          <%= link_to jute_purchases_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">New Purchase</span>
+          <% end %>
+
+          <%= link_to jute_stocks_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-green-400 hover:bg-green-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4m0 0L4 7m16 0v10l-8 4m0-4L4 7v10l8 4"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">View Stocks</span>
+          <% end %>
+
+          <%= link_to buyers_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0H9m6 0a4 4 0 11-8 0"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">Manage Buyers</span>
+          <% end %>
+
+          <%= link_to sales_contracts_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-red-400 hover:bg-red-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-red-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">Contracts</span>
+          <% end %>
+
+          <%= link_to shipments_path, class: "flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition text-center" do %>
+            <svg class="w-8 h-8 text-indigo-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            <span class="text-sm font-medium text-gray-900">Shipments</span>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Business Overview -->
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">Business Overview</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Total Revenue</p>
+              <p class="text-xs text-gray-600">This month</p>
+            </div>
+            <p class="text-2xl font-bold text-green-600">-</p>
+          </div>
+          <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Total Expenses</p>
+              <p class="text-xs text-gray-600">Processing & logistics</p>
+            </div>
+            <p class="text-2xl font-bold text-red-600">-</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Net Profit</p>
+              <p class="text-xs text-gray-600">This month</p>
+            </div>
+            <p class="text-2xl font-bold text-blue-600">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Info -->
+    <div class="space-y-6">
+      <!-- System Status -->
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">System Status</h2>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Database</span>
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Active
+            </span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Server</span>
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Online
+            </span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">API</span>
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Running
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Updates -->
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">Recent Updates</h2>
+        <ul class="space-y-3">
+          <li class="flex gap-3">
+            <div class="flex-shrink-0 w-2 h-2 rounded-full bg-amber-600 mt-2"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">System Updated</p>
+              <p class="text-xs text-gray-600">Today</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <div class="flex-shrink-0 w-2 h-2 rounded-full bg-blue-600 mt-2"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">New Features</p>
+              <p class="text-xs text-gray-600">Yesterday</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <div class="flex-shrink-0 w-2 h-2 rounded-full bg-green-600 mt-2"></div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">Backup Complete</p>
+              <p class="text-xs text-gray-600">2 days ago</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Help & Support -->
+      <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg border border-amber-200 p-6">
+        <h3 class="font-bold text-gray-900 mb-2">Need Help?</h3>
+        <p class="text-sm text-gray-700 mb-4">Get started with our comprehensive documentation and support.</p>
+        <button class="w-full px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition font-medium text-sm">
+          View Documentation
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

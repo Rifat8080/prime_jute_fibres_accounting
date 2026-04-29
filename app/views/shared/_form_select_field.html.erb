@@ -1,0 +1,11 @@
+<div class="mb-4">
+  <%= form.label label_text, class: "block text-sm font-medium text-gray-900 mb-2" %>
+  <%= form.select field_name, 
+    options,
+    { include_blank: include_blank },
+    class: "w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition appearance-none cursor-pointer"
+  %>
+  <% if help_text %>
+    <p class="mt-1 text-xs text-gray-500"><%= help_text %></p>
+  <% end %>
+</div>

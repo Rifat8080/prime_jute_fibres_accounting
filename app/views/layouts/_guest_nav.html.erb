@@ -1,15 +1,36 @@
-<nav class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start">
-        <a href="/" class="flex ml-2 md:mr-24">
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Prime Jute Fibres</span>
-        </a>
+<nav class="bg-white border-b border-gray-200 shadow-sm">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0 flex items-center gap-2">
+        <div class="flex items-center justify-center h-10 w-10 rounded-lg bg-gradient-to-br from-amber-600 to-amber-700">
+          <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          </svg>
+        </div>
+          <%= link_to 'Prime Jute Fibres', home_path, class: "text-xl font-bold text-gray-900" %>
+        <a href="#" class="text-gray-600 hover:text-gray-900 transition text-sm font-medium">Features</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900 transition text-sm font-medium">Contact</a>
       </div>
-      <div class="flex items-center">
-        <%= link_to 'Login', new_user_session_path, class: "text-gray-900 hover:text-blue-700 dark:text-white dark:hover:text-blue-300 mr-4" %>
-        <%= link_to 'Sign Up', new_user_registration_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+
+      <!-- Auth Buttons -->
+      <div class="flex items-center gap-3">
+        <% if user_signed_in? %>
+          <span class="text-sm text-gray-600"><%= current_user.email %></span>
+          <%= link_to 'Dashboard', dashboard_path, class: "text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-lg transition" %>
+          <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, form: { class: "inline" }, class: "text-sm text-gray-600 hover:text-gray-900 transition" %>
+        <% else %>
+          <%= link_to 'Login', new_user_session_path, class: "text-sm font-medium text-amber-600 hover:text-amber-700 transition" %>
+          <%= link_to 'Sign Up', new_user_registration_path, class: "text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-lg transition" %>
+        <% end %>
       </div>
+
+      <!-- Mobile Menu Button -->
+      <button type="button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
     </div>
   </div>
 </nav>
