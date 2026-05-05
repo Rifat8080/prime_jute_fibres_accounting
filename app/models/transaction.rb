@@ -52,7 +52,7 @@ class Transaction < ApplicationRecord
         beneficiary: beneficiary
       )
 
-      [debit, credit]
+      [ debit, credit ]
     end
   end
 
