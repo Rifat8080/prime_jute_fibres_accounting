@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  jute_quality: MyString
-  quantity_bales: 9.99
-  last_updated: 2025-11-18 19:03:58
+  product_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  stock_house_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  quantity: 100.0
 
 two:
-  jute_quality: MyString
-  quantity_bales: 9.99
-  last_updated: 2025-11-18 19:03:58
+  product_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  stock_house_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  quantity: 200.0

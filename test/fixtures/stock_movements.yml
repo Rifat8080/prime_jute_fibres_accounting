@@ -1,13 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  movement_type: MyString
-  quantity_bales: 9.99
-  movement_date: 2025-11-18 19:03:59
-  notes: MyText
+  product_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  warehouse_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  quantity: 50.0
+  movement_type: "in"
+  reference_type: "JutePurchase"
+  reference_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
+  total_amount: 1000.0
 
 two:
-  movement_type: MyString
-  quantity_bales: 9.99
-  movement_date: 2025-11-18 19:03:59
-  notes: MyText
+  product_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  warehouse_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  quantity: 25.0
+  movement_type: "out"
+  reference_type: "ProcessingBatch"
+  reference_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  total_amount: 500.0

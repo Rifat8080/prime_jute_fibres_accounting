@@ -15,9 +15,25 @@ class JutePurchase < ApplicationRecord
   after_create :allocate_to_stock
   after_save :update_stock_movement_total_amount, if: -> { saved_change_to_total_amount? }
   after_update :reallocate_stock, if: -> { saved_change_to_quantity_kg? || saved_change_to_product_id? || saved_change_to_stock_house_id? || saved_change_to_purchase_date? }
+  after_create :post_accounting_transaction
 
   def calculate_total_amount
     self.total_amount = (self.quantity_kg * self.rate_per_kg) + procurement_costs.sum(:amount)
+  end
+
+  def post_accounting_transaction
+    inventory_account = Account.find_or_create_by!(name: "Inventory", account_type: "asset", account_number: "1000", bank_name: "Internal")
+    cash_account = Account.cash_accounts.first || Account.find_or_create_by!(name: "Cash", account_type: "cash", account_number: "2000", bank_name: "Prime Bank")
+
+    Transaction.post!(
+      debit_account: inventory_account,
+      credit_account: cash_account,
+      amount: total_amount,
+      transaction_date: purchase_date,
+      description: "Purchase of #{quantity_kg}kg #{product&.name} from #{supplier&.name}",
+      category: "purchase",
+      related_entity: self
+    )
   end
 
   def allocate_to_stock

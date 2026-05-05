@@ -1,14 +1,60 @@
 class Transaction < ApplicationRecord
   belongs_to :account
+  belongs_to :related_entity, polymorphic: true, optional: true
 
+  TRANSACTION_TYPES = %w[debit credit].freeze
 
-  validates :transaction_type, presence: true, inclusion: { in: %w[debit credit], message: "%{value} is not a valid type" }
-  validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :transaction_date, presence: true
+  validates :transaction_type, presence: true, inclusion: { in: TRANSACTION_TYPES, message: "%{value} is not a valid type" }
+  validates :amount, presence: true, numericality: { greater_than: 0 }
+
+  scope :debits, -> { where(transaction_type: "debit") }
+  scope :credits, -> { where(transaction_type: "credit") }
+  scope :recent, -> { order(transaction_date: :desc, created_at: :desc) }
+  scope :for_account, ->(account_ids) { where(account_id: account_ids) }
+
+  before_validation :set_default_transaction_date
+  before_validation :normalize_transaction_type
 
   after_create :apply_to_account
   before_update :cache_previous_values
   after_update :apply_update_to_account
   after_destroy :revert_from_account
+
+  def self.post!(debit_account:, credit_account:, amount:, transaction_date: Time.zone.today, description: nil, category: nil, related_entity: nil, transaction_reference: nil, beneficiary: nil)
+    amount = amount.to_d
+    raise ArgumentError, "Amount must be positive" if amount <= 0
+
+    transaction_date ||= Time.zone.today
+
+    ActiveRecord::Base.transaction do
+      debit = create!(
+        account: debit_account,
+        related_entity: related_entity,
+        transaction_date: transaction_date,
+        transaction_type: "debit",
+        amount: amount,
+        description: description,
+        category: category,
+        transaction_reference: transaction_reference,
+        beneficiary: beneficiary
+      )
+
+      credit = create!(
+        account: credit_account,
+        related_entity: related_entity,
+        transaction_date: transaction_date,
+        transaction_type: "credit",
+        amount: amount,
+        description: description,
+        category: category,
+        transaction_reference: transaction_reference,
+        beneficiary: beneficiary
+      )
+
+      [debit, credit]
+    end
+  end
 
   def credit?
     transaction_type.to_s.downcase == "credit"
@@ -19,6 +65,14 @@ class Transaction < ApplicationRecord
   end
 
   private
+
+  def set_default_transaction_date
+    self.transaction_date ||= Time.zone.current.to_date
+  end
+
+  def normalize_transaction_type
+    self.transaction_type = transaction_type.to_s.downcase if transaction_type.present?
+  end
 
   def apply_to_account
     delta = effect_amount
